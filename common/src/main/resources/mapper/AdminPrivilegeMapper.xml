@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.common.mybatis.AdminPrivilegeMapper">
+    <resultMap id="BaseResultMap" type="com.spring.common.po.AdminPrivilege">
+        <id column="uk" jdbcType="VARCHAR" property="uk"/>
+        <result column="privilege_type" jdbcType="INTEGER" property="privilegeType"/>
+        <result column="privilege_name" jdbcType="VARCHAR" property="privilegeName"/>
+        <result column="privilege_path" jdbcType="VARCHAR" property="privilegePath"/>
+        <result column="sort" jdbcType="VARCHAR" property="sort"/>
+        <result column="parent_uk" jdbcType="VARCHAR" property="parentUk"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    uk, privilege_type, privilege_name, privilege_path,sort, parent_uk, create_time, update_time
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from admin_privilege
+        where uk = #{uk,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByPath" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from admin_privilege
+        where privilege_path LIKE CONCAT('%',#{privilegePath,jdbcType=VARCHAR},'%')
+    </select>
+    <select id="listAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from admin_privilege
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from admin_privilege
+    where uk = #{uk,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.spring.common.po.AdminPrivilege">
+    insert into admin_privilege (uk, privilege_type, privilege_name, privilege_path,
+      sort, parent_uk, create_time, 
+      update_time)
+    values (#{uk,jdbcType=VARCHAR}, #{privilegeType,jdbcType=INTEGER}, #{privilegeName,jdbcType=VARCHAR},
+    #{privilegePath,jdbcType=VARCHAR}, #{sort,jdbcType=VARCHAR}, #{parentUk,jdbcType=VARCHAR},
+    #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.spring.common.po.AdminPrivilege">
+        insert into admin_privilege
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uk != null">
+                uk,
+            </if>
+            <if test="privilegeType != null">
+                privilege_type,
+            </if>
+            <if test="privilegeName != null">
+                privilege_name,
+            </if>
+            <if test="privilegePath != null">
+                privilege_path,
+            </if>
+            <if test="sort != null">
+                sort,
+            </if>
+            <if test="parentUk != null">
+                parent_uk,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uk != null">
+                #{uk,jdbcType=VARCHAR},
+            </if>
+            <if test="privilegeType != null">
+                #{privilegeType,jdbcType=INTEGER},
+            </if>
+            <if test="privilegeName != null">
+                #{privilegeName,jdbcType=VARCHAR},
+            </if>
+            <if test="privilegePath != null">
+                #{privilegePath,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType=VARCHAR},
+            </if>
+            <if test="parentUk != null">
+                #{parentUk,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.spring.common.po.AdminPrivilege">
+        update admin_privilege
+        <set>
+            <if test="privilegeType != null">
+                privilege_type = #{privilegeType,jdbcType=INTEGER},
+            </if>
+            <if test="privilegeName != null">
+                privilege_name = #{privilegeName,jdbcType=VARCHAR},
+            </if>
+            <if test="privilegePath != null">
+                privilege_path = #{privilegePath,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                sort = #{sort,jdbcType=VARCHAR},
+            </if>
+            <if test="parentUk != null">
+                parent_uk = #{parentUk,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where uk = #{uk,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.spring.common.po.AdminPrivilege">
+    update admin_privilege
+    set privilege_type = #{privilegeType,jdbcType=INTEGER},
+      privilege_name = #{privilegeName,jdbcType=VARCHAR},
+      privilege_path = #{privilegePath,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=VARCHAR},
+      parent_uk = #{parentUk,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where uk = #{uk,jdbcType=VARCHAR}
+  </update>
+</mapper>

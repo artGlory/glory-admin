@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.common.mybatis.LogAdminLoginMapper">
+    <resultMap id="BaseResultMap" type="com.spring.common.po.LogAdminLogin">
+        <id column="uk" jdbcType="VARCHAR" property="uk"/>
+        <result column="user_uk" jdbcType="VARCHAR" property="userUk"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="user_role_uk" jdbcType="VARCHAR" property="userRoleUk"/>
+        <result column="remote_ip" jdbcType="VARCHAR" property="remoteIp"/>
+        <result column="remote_address" jdbcType="VARCHAR" property="remoteAddress"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.spring.common.po.LogAdminLogin">
+        <result column="remark" jdbcType="LONGVARCHAR" property="remark"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    uk, user_uk,user_name,user_role_uk, remote_ip, remote_address, create_time, update_time
+  </sql>
+    <sql id="Blob_Column_List">
+    remark
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from log_admin_login
+        where uk = #{uk,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from log_admin_login
+    where uk = #{uk,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.spring.common.po.LogAdminLogin">
+    insert into log_admin_login (uk, user_uk, user_name,user_role_uk,remote_ip,
+      remote_address, create_time, update_time, 
+      remark)
+    values (#{uk,jdbcType=VARCHAR}, #{userUk,jdbcType=VARCHAR},#{userName,jdbcType=VARCHAR}
+    ,#{userRoleUk,jdbcType=VARCHAR}, #{remoteIp,jdbcType=VARCHAR},
+      #{remoteAddress,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=LONGVARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.spring.common.po.LogAdminLogin">
+        insert into log_admin_login
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uk != null">
+                uk,
+            </if>
+            <if test="userUk != null">
+                user_uk,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="userRoleUk != null">
+                user_role_uk,
+            </if>
+            <if test="remoteIp != null">
+                remote_ip,
+            </if>
+            <if test="remoteAddress != null">
+                remote_address,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uk != null">
+                #{uk,jdbcType=VARCHAR},
+            </if>
+            <if test="userUk != null">
+                #{userUk,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userRoleUk != null">
+                #{userRoleUk,jdbcType=VARCHAR},
+            </if>
+            <if test="remoteIp != null">
+                #{remoteIp,jdbcType=VARCHAR},
+            </if>
+            <if test="remoteAddress != null">
+                #{remoteAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.spring.common.po.LogAdminLogin">
+        update log_admin_login
+        <set>
+            <if test="userUk != null">
+                user_uk = #{userUk,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userRoleUk != null">
+                user_role_uk = #{userRoleUk,jdbcType=VARCHAR},
+            </if>
+            <if test="remoteIp != null">
+                remote_ip = #{remoteIp,jdbcType=VARCHAR},
+            </if>
+            <if test="remoteAddress != null">
+                remote_address = #{remoteAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where uk = #{uk,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.spring.common.po.LogAdminLogin">
+    update log_admin_login
+    set
+    user_uk = #{userUk,jdbcType=VARCHAR},
+    user_name = #{userName,jdbcType=VARCHAR},
+      user_role_uk = #{userRoleUk,jdbcType=VARCHAR},
+      remote_ip = #{remoteIp,jdbcType=VARCHAR},
+      remote_address = #{remoteAddress,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=LONGVARCHAR}
+    where uk = #{uk,jdbcType=VARCHAR}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="com.spring.common.po.LogAdminLogin">
+    update log_admin_login
+    set
+      user_uk = #{userUk,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      user_role_uk = #{userRoleUk,jdbcType=VARCHAR},
+      remote_ip = #{remoteIp,jdbcType=VARCHAR},
+      remote_address = #{remoteAddress,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where uk = #{uk,jdbcType=VARCHAR}
+  </update>
+    <sql id="adminLoginLogCondition">
+        where 1=1
+        <if test="userName!=null and userName!=''">
+            and user_name = #{userName,jdbcType=VARCHAR}
+        </if>
+        <if test="remoteIp!=null and remoteIp!=''">
+            and remote_ip = #{remoteIp,jdbcType=VARCHAR}
+        </if>
+        <if test="roleUkList!=null and roleUkList.size>0">
+            and role_uk in
+            <foreach collection="roleUkList" item="roleUkTemp" open="(" separator="," close=")">
+                #{roleUkTemp,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+    </sql>
+    <select id="listByCondition" parameterType="com.spring.common.domain.condition.AdminLoginLogCondition"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from log_admin_login
+        <include refid="adminLoginLogCondition"/>
+        <trim prefix="order by" suffixOverrides=",">
+            <if test="createTimeSortType!=null">
+                create_time ${createTimeSortType},
+            </if>
+        </trim>
+        <if test="page!=null and size!=null">
+            limit #{startIndex,jdbcType=INTEGER},#{endIndex,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="countByCondition" parameterType="com.spring.common.domain.condition.AdminLoginLogCondition"
+            resultType="long">
+        select
+        count(uk)
+        from log_admin_login
+        <include refid="adminLoginLogCondition"/>
+    </select>
+</mapper>

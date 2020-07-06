@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="10 seconds">
+    <!--scan:-->
+    <!--当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true。（这个功能可以在不重启运行环境下，调整打印日志的细节，方便定位问题）-->
+    <!--scanPeriod:-->
+    <!--设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。-->
+    <!--debug:-->
+    <!--当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。-->
+
+    <!--Logger 可以被分配级别。级别包括：TRACE、DEBUG、INFO、WARN 和 ERROR-->
+
+    <!--级别排序为： TRACE < DEBUG < INFO < WARN < ERROR-->
+    <!--logger：日志所处的包-->
+    <!--level：日志打印级别-->
+    <logger name="com.springboot" level="INFO"/>
+    <!--<logger name="org.apache.activemq" level="INFO"/>-->
+    <!--<logger name="org.apache.zookeeper" level="INFO"/>-->
+    <!--com.alibaba.dubbo是dubbo服务的包，在如何是info一下的级别会产生大量的启动日志，调成WARN减少日志输出-->
+    <!--<logger name="com.alibaba.dubbo" level="WARN"/>-->
+    <!--com.ztev.afavicon.icoudit.dao是本项目的dao层的包，把这个包的打印日志级别调成 DEBUG级别可以看到sql执行-->
+    <!--<logger name="com.ztev.audit.dao" level="DEBUG"/>-->
+    <!--<logger name="com.ztev.cardNoVin.dao" level="DEBUG"/>-->
+
+    <!--文件输出的格式设置 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 日志日常打印文件 -->
+        <file>logs/admin/spring-log.log</file>
+        <!-- 配置日志所生成的目录以及生成文件名的规则 在logs/mylog-2017-06-31.0.log.zip -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/admin/spring-log-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <!-- 如果按天来回滚，则最大保存时间为365天，365天之前的都将被清理掉 -->
+            <maxHistory>10</maxHistory>
+            <!-- 日志总保存量为10GB -->
+            <totalSizeCap>2GB</totalSizeCap>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!--文件达到 最大128MB时会被压缩和切割 -->
+                <maxFileSize>128 MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <!-- 文件输出的日志 的格式 -->
+        <encoder>
+            <pattern>
+                [ %-5level] [%date{yyyy-MM-dd HH:mm:ss}] %logger{96} -%msg%n
+            </pattern>
+            <charset>UTF-8</charset> <!-- 此处设置字符集 -->
+        </encoder>
+        <!-- Safely log to the same file from multiple JVMs. Degrades performance! -->
+        <prudent>false</prudent>
+    </appender>
+    <!--控制台输出的格式设置 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 控制台输出的日志 的格式 -->
+        <encoder>
+            <pattern>
+                [ %-5level] [%date{yyyy-MM-dd HH:mm:ss}] %logger{96} [%line] - %msg%n
+            </pattern>
+            <charset>UTF-8</charset> <!-- 此处设置字符集 -->
+        </encoder>
+        <!-- 只是DEBUG级别以上的日志才显示 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+    </appender>
+
+    <!-- Enable FILE and STDOUT appenders for all log messages. By default,
+         only log at level INFO and above. -->
+    <!--root：-->
+    <!--也是<loger>元素，但是它是根loger。只有一个level属性，应为已经被命名为"root".-->
+    <!--level:用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，不能设置为INHERITED或者同义词NULL。默认是DEBUG。-->
+    <root level="INFO">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

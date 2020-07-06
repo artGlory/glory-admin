@@ -1,0 +1,6 @@
+.idea/
+*.log
+*.iml
+*/target/
+/logs/
+transaction-logs/

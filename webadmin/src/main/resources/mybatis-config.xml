@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <settings>
+        <!-- Globally enables or disables any caches configured in any mapper under this configuration -->
+        <setting name="cacheEnabled" value="false"/>
+        <!-- Sets the number of seconds the driver will wait for a response from the database -->
+        <setting name="defaultStatementTimeout" value="3000"/>
+        <!-- Enables automatic mapping from classic database column names A_COLUMN to camel case classic Java property names aColumn -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--延迟加载-->
+        <setting name="lazyLoadingEnabled" value="true"></setting>
+        <!--是否按需加载属性；开启式，无论调用什么方法加载某个某个对象，都会加载该对象的所有属性，关闭之后只会按需加载-->
+        <setting name="aggressiveLazyLoading" value="false"></setting>
+        <!--为了防止从数据库查询出来的结果过多，导致内存溢出，可以设置fetchSize参数来控制结果集的数量-->
+        <setting name="defaultFetchSize" value="200"/>
+        <!--当查询行不存在的，返回null;注：mybatis默认返回数组的时候，如果为空，则返回空数组，非null-->
+        <setting name="returnInstanceForEmptyRow" value="false"/>
+        <!--是否在空值情况先调用set方法-->
+        <setting name="callSettersOnNulls" value="false"/>
+        <!-- Allows JDBC support for generated keys. A compatible driver is required.
+        This setting     forces generated keys to be used if set to true,
+         as some drivers deny compatibility but still work -->
+        <setting name="useGeneratedKeys" value="true"/>
+        <!--sql日志功能-->
+<!--        <setting name="logImpl" value="STDOUT_LOGGING"/>-->
+    </settings>
+</configuration>

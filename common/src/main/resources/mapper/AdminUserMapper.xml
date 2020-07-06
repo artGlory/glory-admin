@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.common.mybatis.AdminUserMapper">
+    <resultMap id="BaseResultMap" type="com.spring.common.po.AdminUser">
+        <id column="uk" jdbcType="VARCHAR" property="uk"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="role_uk" jdbcType="VARCHAR" property="roleUk"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    uk, username, password, role_uk, create_time, update_time
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from admin_user
+        where uk = #{uk,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from admin_user
+        where username = #{username,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from admin_user
+    where uk = #{uk,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.spring.common.po.AdminUser">
+    insert into admin_user (uk, username, password, 
+      role_uk, create_time, update_time
+      )
+    values (#{uk,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{roleUk,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.spring.common.po.AdminUser">
+        insert into admin_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uk != null">
+                uk,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="roleUk != null">
+                role_uk,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uk != null">
+                #{uk,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="roleUk != null">
+                #{roleUk,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.spring.common.po.AdminUser">
+        update admin_user
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="roleUk != null">
+                role_uk = #{roleUk,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where uk = #{uk,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.spring.common.po.AdminUser">
+    update admin_user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      role_uk = #{roleUk,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where uk = #{uk,jdbcType=VARCHAR}
+    </update>
+    <sql id="adminUsercondition">
+        where 1=1
+        <if test="uk!=null and uk!=''">
+            and uk=#{uk,jdbcType=VARCHAR}
+        </if>
+        <if test="username!=null and username!=''">
+            and username = #{username,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime!=null">
+            and create_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime!=null">
+            and create_time &lt; #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="roleUkList!=null and roleUkList.size>0">
+            and role_uk in
+            <foreach collection="roleUkList" item="roleUkTemp" open="(" separator="," close=")">
+                #{roleUkTemp,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+    </sql>
+    <select id="listByCondition" parameterType="com.spring.common.domain.condition.AdminUserCondition"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from admin_user
+        <include refid="adminUsercondition"/>
+        <trim prefix="order by" suffixOverrides=",">
+            <if test="createTimeSortType!=null">
+                create_time ${createTimeSortType},
+            </if>
+        </trim>
+        <if test="page!=null and size!=null">
+            limit #{startIndex,jdbcType=INTEGER},#{endIndex,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="countByCondition" parameterType="com.spring.common.domain.condition.AdminUserCondition"
+            resultType="long">
+        select
+        count(uk)
+        from admin_user
+        <include refid="adminUsercondition"/>
+    </select>
+</mapper>

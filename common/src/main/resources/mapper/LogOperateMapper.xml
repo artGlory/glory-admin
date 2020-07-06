@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.common.mybatis.LogOperateMapper">
+    <resultMap id="BaseResultMap" type="com.spring.common.po.LogOperate">
+        <id column="uk" jdbcType="VARCHAR" property="uk"/>
+        <result column="operator" jdbcType="VARCHAR" property="operator"/>
+        <result column="operator_uk" jdbcType="VARCHAR" property="operatorUk"/>
+        <result column="operator_role_uk" jdbcType="VARCHAR" property="operatorRoleUk"/>
+        <result column="operate_name" jdbcType="VARCHAR" property="operateName"/>
+        <result column="result" jdbcType="INTEGER" property="result"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.spring.common.po.LogOperate">
+        <result column="operate_path" jdbcType="LONGVARCHAR" property="operatePath"/>
+        <result column="params" jdbcType="LONGVARCHAR" property="params"/>
+        <result column="fail_reason" jdbcType="LONGVARCHAR" property="failReason"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    uk, operator,operator_uk,operator_role_uk, operate_name, result, create_time, update_time
+  </sql>
+    <sql id="Blob_Column_List">
+    operate_path, params, fail_reason
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from log_operate
+        where uk = #{uk,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from log_operate
+    where uk = #{uk,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.spring.common.po.LogOperate">
+    insert into log_operate (uk, operator,operator_uk,operator_role_uk, operate_name,
+      result, create_time, update_time, 
+      operate_path, params, fail_reason
+      )
+    values (#{uk,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR},#{operatorUk,jdbcType=VARCHAR}
+    ,#{operatorRoleUk,jdbcType=VARCHAR}, #{operateName,jdbcType=VARCHAR},
+      #{result,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{operatePath,jdbcType=LONGVARCHAR}, #{params,jdbcType=LONGVARCHAR}, #{failReason,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.spring.common.po.LogOperate">
+        insert into log_operate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uk != null">
+                uk,
+            </if>
+            <if test="operator != null">
+                operator,
+            </if>
+            <if test="operatorUk != null">
+                operator_uk,
+            </if>
+            <if test="operatorRoleUk != null">
+                operator_role_uk,
+            </if>
+            <if test="operateName != null">
+                operate_name,
+            </if>
+            <if test="result != null">
+                result,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="operatePath != null">
+                operate_path,
+            </if>
+            <if test="params != null">
+                params,
+            </if>
+            <if test="failReason != null">
+                fail_reason,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uk != null">
+                #{uk,jdbcType=VARCHAR},
+            </if>
+            <if test="operator != null">
+                #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="operatorUk != null">
+                #{operator_uk,jdbcType=VARCHAR},
+            </if>
+            <if test="operatorRoleUk != null">
+                #{operator_role_uk,jdbcType=VARCHAR},
+            </if>
+            <if test="operateName != null">
+                #{operateName,jdbcType=VARCHAR},
+            </if>
+            <if test="result != null">
+                #{result,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="operatePath != null">
+                #{operatePath,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="params != null">
+                #{params,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="failReason != null">
+                #{failReason,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.spring.common.po.LogOperate">
+        update log_operate
+        <set>
+            <if test="operator != null">
+                operator = #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="operatorUk != null">
+                operator_uk = #{operatorUk,jdbcType=VARCHAR},
+            </if>
+            <if test="operatorRoleUk != null">
+                operator_role_uk = #{operatorRoleUk,jdbcType=VARCHAR},
+            </if>
+            <if test="operateName != null">
+                operate_name = #{operateName,jdbcType=VARCHAR},
+            </if>
+            <if test="result != null">
+                result = #{result,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="operatePath != null">
+                operate_path = #{operatePath,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="params != null">
+                params = #{params,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="failReason != null">
+                fail_reason = #{failReason,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where uk = #{uk,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.spring.common.po.LogOperate">
+    update log_operate
+    set
+      operator = #{operator,jdbcType=VARCHAR},
+      operator_uk = #{operatorUk,jdbcType=VARCHAR},
+      operator_role_uk = #{operatorRoleUk,jdbcType=VARCHAR},
+      operate_name = #{operateName,jdbcType=VARCHAR},
+      result = #{result,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      operate_path = #{operatePath,jdbcType=LONGVARCHAR},
+      params = #{params,jdbcType=LONGVARCHAR},
+      fail_reason = #{failReason,jdbcType=LONGVARCHAR}
+    where uk = #{uk,jdbcType=VARCHAR}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="com.spring.common.po.LogOperate">
+    update log_operate
+    set
+      operator = #{operator,jdbcType=VARCHAR},
+      operator_uk = #{operatorUk,jdbcType=VARCHAR},
+      operator_role_uk = #{operatorRoleUk,jdbcType=VARCHAR},
+      operate_name = #{operateName,jdbcType=VARCHAR},
+      result = #{result,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where uk = #{uk,jdbcType=VARCHAR}
+  </update>
+    <sql id="adminOperateLogCondition">
+        where 1=1
+        <if test="operator!=null and operator!=''">
+            and operator = #{operator,jdbcType=VARCHAR}
+        </if>
+        <if test="operateName!=null and operateName!=''">
+            and operate_name = #{operateName,jdbcType=VARCHAR}
+        </if>
+        <if test="result!=null">
+            and result = #{result,jdbcType=INTEGER}
+        </if>
+        <if test="roleUkList!=null and roleUkList.size>0">
+            <foreach collection="roleUkList" item="roleUkTemp" open="(" separator="," close=")">
+                #{roleUpTemp,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+    </sql>
+    <select id="listByCondition" parameterType="com.spring.common.domain.condition.AdminOperateLogCondition"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from log_operate
+        <include refid="adminOperateLogCondition"/>
+        <trim prefix="order by" suffixOverrides=",">
+            <if test="createTimeSortType!=null">
+                create_time ${createTimeSortType},
+            </if>
+        </trim>
+        <if test="page!=null and size!=null">
+            limit #{startIndex,jdbcType=INTEGER},#{endIndex,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="countByCondition" parameterType="com.spring.common.domain.condition.AdminOperateLogCondition"
+            resultType="long">
+        select
+        count(uk)
+        from log_operate
+        <include refid="adminOperateLogCondition"/>
+    </select>
+</mapper>
