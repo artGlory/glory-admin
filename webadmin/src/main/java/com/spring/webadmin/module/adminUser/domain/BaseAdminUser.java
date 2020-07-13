@@ -25,7 +25,7 @@ public class BaseAdminUser implements Serializable {
      * @mbg.generated
      */
     @ApiModelProperty(value = "唯一标识")
-    private Long uk;
+    private String uk;
 
     /**
      * 用户名

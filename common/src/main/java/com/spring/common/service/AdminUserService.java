@@ -1,30 +1,8 @@
 package com.spring.common.service;
 
-import com.spring.common.po.AdminRole;
 import com.spring.common.po.AdminUser;
 
 public interface AdminUserService {
-
-    /**
-     * 新增管理员角色
-     *
-     * @param adminRole
-     * @return
-     */
-    int addAdminRole(AdminRole adminRole);
-
-    /**
-     * 更改管理员角色
-     */
-    int updateAdminRole(AdminRole adminRole);
-
-    /**
-     * 删除管理员角色
-     *
-     * @param adminRole
-     * @return
-     */
-    int deleteAdminRole(AdminRole adminRole);
 
     /**
      * 新增用户
@@ -35,14 +13,6 @@ public interface AdminUserService {
     int addAdminUser(AdminUser adminUser);
 
     /**
-     * 修改用户
-     *
-     * @param adminUser
-     * @return
-     */
-    int updateAdminUser(AdminUser adminUser);
-
-    /**
      * 删除用户
      *
      * @param adminUser
@@ -50,4 +20,51 @@ public interface AdminUserService {
      */
     int deleteAdminUser(AdminUser adminUser);
 
+    /**
+     * 修改 token
+     *
+     * @param adminUser
+     * @return
+     */
+    int updateAdminToken(AdminUser adminUser);
+
+    /**
+     * 修改密码
+     *
+     * @param adminUser
+     * @return
+     */
+    int updateAdminPassword(AdminUser adminUser);
+
+    /**
+     * 修改用户角色
+     *
+     * @param adminUser
+     * @return
+     */
+    int updateAdminRole(AdminUser adminUser);
+
+    /**
+     * 修改googleKey
+     */
+    int updateAdminGoogleKey(AdminUser adminUser);
+
+    /**
+     * 修改google登陆状态
+     */
+    int updateAdminLoginWithGoogleStatus(AdminUser adminUser);
+
+    /**
+     * 修改用户登陆状态
+     * @param adminUser
+     * @return
+     */
+    int updateAdminLoginStatue(AdminUser adminUser);
+
+    /**
+     * 删除Google绑定
+     * @param adminUser
+     * @return
+     */
+    int deleteAdminGoogleKey(AdminUser adminUser);
 }

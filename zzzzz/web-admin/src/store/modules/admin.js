@@ -12,7 +12,9 @@ const getDefaultState = () => {
       name: '',
       logo: '',
       copyright: ''
-    }
+    },
+    isBindGoogleAuthentication: '',
+    isLoginWithGoogleAuthentication: ''
   }
 }
 
@@ -42,19 +44,29 @@ const mutations = {
   },
   SET_SYSTEM_COPYRIGHT: (state, copyright) => {
     state.system.copyright = copyright
+  },
+  SET_BING_GOOGLE_AUTHENTICATION: (state, isBindGoogleAuthentication) => {
+    state.isBindGoogleAuthentication = isBindGoogleAuthentication
+  },
+  SET_LOGIN_WITH_GOOGLE_AUTHENTICATION: (state, isLoginWithGoogleAuthentication) => {
+    state.isLoginWithGoogleAuthentication = isLoginWithGoogleAuthentication
   }
 }
 
 const actions = {
-  // admnin login
+  // admin login
   login({ commit }, adminInfo) {
-    const { username, password } = adminInfo
+    const { username, password, googleCode } = adminInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      login({ username: username.trim(), password: password, googleCode: googleCode }).then(response => {
         const { data } = response
-        commit('SET_TOKEN', data.token) // context.commit('方法名','参数')
-        setToken(data.token)
-        resolve()
+        if (data.isNeedGoogleCode) {
+          resolve({ needGoogleCode: data.isNeedGoogleCode })
+        } else {
+          commit('SET_TOKEN', data.token) // context.commit('方法名','参数')
+          setToken(data.token)
+          resolve({ needGoogleCode: data.isNeedGoogleCode })
+        }
       }).catch(error => {
         reject(error)
       })
@@ -70,7 +82,7 @@ const actions = {
           reject('验证失败，请重新登陆')
         }
 
-        const { permissions, name, avatar, systemName, systemLogo, systemCopyright } = data
+        const { permissions, name, avatar, systemName, systemLogo, systemCopyright, isBindGoogleAuthentication, isLoginWithGoogleAuthentication } = data
 
         // permissions must be a non-empty array
         if (!permissions || permissions.length <= 0) {
@@ -84,6 +96,8 @@ const actions = {
         commit('SET_SYSTEM_NAME', systemName)
         commit('SET_SYSTEM_LOGO', systemLogo)
         commit('SET_SYSTEM_COPYRIGHT', systemCopyright)
+        commit('SET_BING_GOOGLE_AUTHENTICATION', isBindGoogleAuthentication)
+        commit('SET_LOGIN_WITH_GOOGLE_AUTHENTICATION', isLoginWithGoogleAuthentication)
         resolve(data)
       }).catch(error => {
         reject(error)

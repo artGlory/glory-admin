@@ -12,6 +12,31 @@
 
 
 
+* [Glory\-Admin](#glory-admin)
+    
+    * [技术说明](#%E6%8A%80%E6%9C%AF%E8%AF%B4%E6%98%8E)
+    * [演示](#%E6%BC%94%E7%A4%BA)
+  * [系统架构](#%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84)
+  * [项目启动](#%E9%A1%B9%E7%9B%AE%E5%90%AF%E5%8A%A8)
+    * [数据库安装](#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%89%E8%A3%85)
+    * [项目启动](#%E9%A1%B9%E7%9B%AE%E5%90%AF%E5%8A%A8-1)
+  * [数据库](#%E6%95%B0%E6%8D%AE%E5%BA%93)
+    * [为什么要数据拆分？什么是分库分表？什么是分布式数据库？](#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%95%B0%E6%8D%AE%E6%8B%86%E5%88%86%E4%BB%80%E4%B9%88%E6%98%AF%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E4%BB%80%E4%B9%88%E6%98%AF%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93)
+    * [<a href="https://flywaydb\.org/" rel="nofollow">Flyway</a>数据库的版本控制](#flyway%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6)
+    * [数据库缓存层cacheDao](#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%93%E5%AD%98%E5%B1%82cachedao)
+    * [分库分表](#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8)
+    * [数据分片的拆分方式又分为垂直分片和水平分片](#%E6%95%B0%E6%8D%AE%E5%88%86%E7%89%87%E7%9A%84%E6%8B%86%E5%88%86%E6%96%B9%E5%BC%8F%E5%8F%88%E5%88%86%E4%B8%BA%E5%9E%82%E7%9B%B4%E5%88%86%E7%89%87%E5%92%8C%E6%B0%B4%E5%B9%B3%E5%88%86%E7%89%87)
+    * [常用分片算法](#%E5%B8%B8%E7%94%A8%E5%88%86%E7%89%87%E7%AE%97%E6%B3%95)
+  * [后端](#%E5%90%8E%E7%AB%AF)
+    * [权限设计](#%E6%9D%83%E9%99%90%E8%AE%BE%E8%AE%A1)
+    * [项目结构](#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84)
+    * [Maven使用<a href="https://maven\.apache\.org/guides/introduction/introduction\-to\-dependency\-mechanism\.html" rel="nofollow">BOM</a>管理](#maven%E4%BD%BF%E7%94%A8bom%E7%AE%A1%E7%90%86)
+    * [日志记录](#%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95)
+    * [用户操作日志](#%E7%94%A8%E6%88%B7%E6%93%8D%E4%BD%9C%E6%97%A5%E5%BF%97)
+  * [前端](#%E5%89%8D%E7%AB%AF)
+  
+  
+
 ### 技术说明
 
 | 项目     | 技术                |

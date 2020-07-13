@@ -192,9 +192,16 @@
         <if test="result!=null">
             and result = #{result,jdbcType=INTEGER}
         </if>
-        <if test="roleUkList!=null and roleUkList.size>0">
-            <foreach collection="roleUkList" item="roleUkTemp" open="(" separator="," close=")">
-                #{roleUpTemp,jdbcType=VARCHAR}
+        <if test="startTime!=null">
+            and create_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime!=null">
+            and create_time &lt; #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="roleUkSet!=null and roleUkSet.size>0">
+            and operator_role_uk in
+            <foreach collection="roleUkSet" item="roleUkTemp" open="(" separator="," close=")">
+                #{roleUkTemp,jdbcType=VARCHAR}
             </foreach>
         </if>
     </sql>

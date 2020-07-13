@@ -6,11 +6,15 @@
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
         <result column="role_uk" jdbcType="VARCHAR" property="roleUk"/>
+        <result column="now_token" jdbcType="VARCHAR" property="nowToken"/>
+        <result column="google_key" jdbcType="VARCHAR" property="googleKey"/>
+        <result column="google_login" jdbcType="INTEGER" property="googleLogin"/>
+        <result column="forbid_login" jdbcType="INTEGER" property="forbidLogin"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-    uk, username, password, role_uk, create_time, update_time
+    uk, username, password, role_uk,now_token,google_key,google_login,forbid_login, create_time, update_time
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
@@ -30,10 +34,12 @@
   </delete>
     <insert id="insert" parameterType="com.spring.common.po.AdminUser">
     insert into admin_user (uk, username, password, 
-      role_uk, create_time, update_time
+      role_uk,now_token,google_key,google_login,forbid_login,create_time, update_time
       )
     values (#{uk,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{roleUk,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      #{roleUk,jdbcType=VARCHAR},#{nowToken,jdbcType=VARCHAR},#{googleKey,jdbcType=VARCHAR}
+      ,#{googleLogin,jdbcType=INTEGER},#{forbidLogin,jdbcType=INTEGER}
+       ,#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
     <insert id="insertSelective" parameterType="com.spring.common.po.AdminUser">
@@ -50,6 +56,18 @@
             </if>
             <if test="roleUk != null">
                 role_uk,
+            </if>
+            <if test="nowToken != null">
+                now_token,
+            </if>
+            <if test="googleKey != null">
+                google_key,
+            </if>
+            <if test="googleLogin != null">
+                google_login,
+            </if>
+            <if test="forbidLogin != null">
+                forbid_login,
             </if>
             <if test="createTime != null">
                 create_time,
@@ -71,6 +89,18 @@
             <if test="roleUk != null">
                 #{roleUk,jdbcType=VARCHAR},
             </if>
+            <if test="nowToken != null">
+                #{nowToken,jdbcType=VARCHAR},
+            </if>
+            <if test="googleKey != null">
+                #{googleKey,jdbcType=VARCHAR},
+            </if>
+            <if test="googleLogin != null">
+                #{googleLogin,jdbcType=INTEGER},
+            </if>
+            <if test="forbidLogin != null">
+                #{forbidLogin,jdbcType=INTEGER},
+            </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
             </if>
@@ -91,6 +121,18 @@
             <if test="roleUk != null">
                 role_uk = #{roleUk,jdbcType=VARCHAR},
             </if>
+            <if test="nowToken != null">
+                now_token = #{nowToken,jdbcType=VARCHAR},
+            </if>
+            <if test="googleKey != null">
+                google_key = #{googleKey,jdbcType=VARCHAR},
+            </if>
+            <if test="googleLogin != null">
+                google_login = #{googleLogin,jdbcType=INTEGER},
+            </if>
+            <if test="forbidLogin != null">
+                forbid_login = #{forbidLogin,jdbcType=INTEGER},
+            </if>
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
@@ -105,6 +147,10 @@
     set username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       role_uk = #{roleUk,jdbcType=VARCHAR},
+      now_token = #{nowToken,jdbcType=VARCHAR},
+      google_key = #{googleKey,jdbcType=VARCHAR},
+      google_login = #{googleLogin,jdbcType=INTEGER},
+      forbid_login = #{forbidLogin,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where uk = #{uk,jdbcType=VARCHAR}
@@ -123,9 +169,9 @@
         <if test="endTime!=null">
             and create_time &lt; #{endTime,jdbcType=TIMESTAMP}
         </if>
-        <if test="roleUkList!=null and roleUkList.size>0">
+        <if test="roleUkSet!=null and roleUkSet.size>0">
             and role_uk in
-            <foreach collection="roleUkList" item="roleUkTemp" open="(" separator="," close=")">
+            <foreach collection="roleUkSet" item="roleUkTemp" open="(" separator="," close=")">
                 #{roleUkTemp,jdbcType=VARCHAR}
             </foreach>
         </if>
@@ -152,4 +198,9 @@
         from admin_user
         <include refid="adminUsercondition"/>
     </select>
+    <update id="deleteGoogleKeyByPrimaryKey" parameterType="java.lang.String">
+    UPDATE admin_user set google_key=null
+    where uk = #{uk,jdbcType=VARCHAR}
+  </update>
+
 </mapper>

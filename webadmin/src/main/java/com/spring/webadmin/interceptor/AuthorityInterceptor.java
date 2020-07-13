@@ -86,8 +86,8 @@ public class AuthorityInterceptor implements HandlerInterceptor {
             String privilegePath = controllerName + "." + methodName;
             AdminPrivilege adminPrivilege = PrivilegeTool.getByPrivilegePath(privilegePath);
             if (adminPrivilege == null) {
-                responsePrint(response, "权限不足");
-                log.error("[没用此权限]" + adminInfoDTO.getName() + ";" + privilegePath);
+                responsePrint(response, "权限不存在[" + privilegePath + "]");
+                log.error("[权限不存在]" + adminInfoDTO.getName() + ";" + privilegePath);
                 return false;
             } else {
                 boolean hasPermission = false;
@@ -98,8 +98,8 @@ public class AuthorityInterceptor implements HandlerInterceptor {
                 if (hasPermission) {
                     return true;
                 } else {
-                    responsePrint(response, "权限不足");
-                    log.error("[没用此权限]" + adminInfoDTO.getName() + ";" + privilegePath);
+                    responsePrint(response, "权限不足[" + privilegePath + "]");
+                    log.error("[权限不足]" + adminInfoDTO.getName() + ";" + privilegePath);
                     return false;
                 }
             }

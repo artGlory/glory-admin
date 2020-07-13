@@ -2,6 +2,7 @@ package com.spring.common.mybatis;
 
 import com.spring.common.domain.condition.AdminLoginLogCondition;
 import com.spring.common.po.LogAdminLogin;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 

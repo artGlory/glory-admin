@@ -2,8 +2,11 @@ package com.spring.common.mybatis;
 
 import com.spring.common.domain.condition.AdminUserCondition;
 import com.spring.common.po.AdminUser;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,4 +30,7 @@ public interface AdminUserMapper {
     List<AdminUser> listByCondition(AdminUserCondition adminUserCondition);
 
     long countByCondition(AdminUserCondition adminUserCondition);
+
+    int deleteGoogleKeyByPrimaryKey(String uk);
+
 }

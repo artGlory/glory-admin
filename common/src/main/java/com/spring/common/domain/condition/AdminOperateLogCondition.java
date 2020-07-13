@@ -7,7 +7,9 @@ import lombok.*;
 
 import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,7 +27,7 @@ public class AdminOperateLogCondition extends BaseCondition {
     @ApiModelProperty(value = "操作类别")
     private String operateName;
     @ApiModelProperty(value = "角色列表")
-    List<String> roleUkList = new ArrayList<>();
+    Set<String> roleUkSet = new HashSet<>();
     @ApiModelProperty(value = "操作结果")
     @Pattern(regexp = "1|0", message = "1成功，0失败")
     private Integer result;

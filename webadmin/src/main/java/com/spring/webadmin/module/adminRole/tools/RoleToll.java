@@ -1,6 +1,6 @@
 package com.spring.webadmin.module.adminRole.tools;
 
-import com.spring.common.cacheDao.AdminRoleCacheDao;
+import com.spring.common.mybatis.AdminRoleMapper;
 import com.spring.common.po.AdminRole;
 import com.spring.common.utils.SmartBeanUtil;
 import com.spring.webadmin.constant.CommonConstants;
@@ -9,15 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class RoleToll {
-    private static AdminRoleCacheDao adminRoleCacheDao;
+    private static AdminRoleMapper adminRoleMapper;
 
     @Autowired
-    private void setAdminRoleCacheDao(AdminRoleCacheDao adminRoleCacheDao) {
-        RoleToll.adminRoleCacheDao = adminRoleCacheDao;
+    public void setAdminRoleMapper(AdminRoleMapper adminRoleMapper) {
+        RoleToll.adminRoleMapper = adminRoleMapper;
     }
 
     /**
@@ -26,7 +28,7 @@ public class RoleToll {
      * @param adminRoleTreeVO
      */
     private static void generateSubChildrenTree(AdminRoleTreeVO adminRoleTreeVO) {
-        List<AdminRole> subAdminRoleList = adminRoleCacheDao.listAllByParentUk(adminRoleTreeVO.getUk());
+        List<AdminRole> subAdminRoleList = adminRoleMapper.listAllByParentUk(adminRoleTreeVO.getUk());
         for (AdminRole subTemp : subAdminRoleList) {
             AdminRoleTreeVO subAdminRoleTreeVO = SmartBeanUtil.copy(subTemp, AdminRoleTreeVO.class);
             adminRoleTreeVO.getChildren().add(subAdminRoleTreeVO);
@@ -75,7 +77,7 @@ public class RoleToll {
         List<AdminRole> adminRoleList = new ArrayList<>();
         AdminRole adminRoleTemp = adminRole;
         while (isTopRole(adminRoleTemp) == false) {
-            adminRoleTemp = adminRoleCacheDao.selectByPrimaryKey(adminRoleTemp.getParentUk());
+            adminRoleTemp = adminRoleMapper.selectByPrimaryKey(adminRoleTemp.getParentUk());
             adminRoleList.add(adminRoleTemp);
         }
         return adminRoleList;
@@ -88,7 +90,7 @@ public class RoleToll {
      * @param adminRoleList
      */
     private static void addSubRole(AdminRole adminRole, List<AdminRole> adminRoleList) {
-        List<AdminRole> subList = adminRoleCacheDao.listAllByParentUk(adminRole.getUk());
+        List<AdminRole> subList = adminRoleMapper.listAllByParentUk(adminRole.getUk());
         adminRoleList.addAll(subList);
         for (AdminRole subRole : subList) {
             addSubRole(subRole, adminRoleList);
@@ -118,8 +120,8 @@ public class RoleToll {
      */
     public static boolean isDirectSubRole(String roleUk1, String roleUk2) {
 
-        AdminRole adminRole1 = adminRoleCacheDao.selectByPrimaryKey(roleUk1);
-        AdminRole adminRole2 = adminRoleCacheDao.selectByPrimaryKey(roleUk2);
+        AdminRole adminRole1 = adminRoleMapper.selectByPrimaryKey(roleUk1);
+        AdminRole adminRole2 = adminRoleMapper.selectByPrimaryKey(roleUk2);
         if (adminRole1 == null || adminRole2 == null) throw new IllegalArgumentException("角色不存在");
 
         boolean isCanOperate = false;
@@ -145,7 +147,7 @@ public class RoleToll {
     }
 
     /**
-     * 判断是否位顶级角色
+     * 判断是否为顶级角色
      *
      * @param adminRole
      * @return
@@ -155,13 +157,55 @@ public class RoleToll {
     }
 
     /**
+     * 判断是否为顶级角色
+     *
+     * @return
+     */
+    public static boolean isTopRole(String adminRoleUk) {
+        AdminRole adminRole = adminRoleMapper.selectByPrimaryKey(adminRoleUk);
+        return CommonConstants.top_uk.equals(adminRole);
+    }
+
+    /**
      * 获取所有顶级角色
      *
      * @return
      */
     public static List<AdminRole> listAllTopRole() {
-        List<AdminRole> adminRoleList = adminRoleCacheDao.listAllByParentUk(CommonConstants.top_uk);
+        List<AdminRole> adminRoleList = adminRoleMapper.listAllByParentUk(CommonConstants.top_uk);
         return adminRoleList;
+    }
+
+    /**
+     * 获取所有直属下级角色
+     *
+     * @param adminRole
+     * @return
+     */
+    public static Set<String> getAllSubRoleUk(AdminRole adminRole) {
+        Set<String> roleSet = new HashSet<>();
+        List<AdminRole> adminRoleList = RoleToll.getAllSubRole(adminRole);
+        adminRoleList.forEach(adminRoleTemp -> {
+            roleSet.add(adminRoleTemp.getUk());
+        });
+        return roleSet;
+    }
+
+    /**
+     * 获取所有直属下级角色和当前角色；顶级角色获取所有
+     *
+     * @param adminRole
+     * @return
+     */
+    public static Set<String> getSelfRoleAndAllSubRoleUk(AdminRole adminRole) {
+        Set<String> roleSet = new HashSet<>();
+        List<AdminRole> adminRoleList = new ArrayList<>();
+        adminRoleList = RoleToll.getAllSubRole(adminRole);
+        adminRoleList.add(adminRole);
+        adminRoleList.forEach(adminRoleTemp -> {
+            roleSet.add(adminRoleTemp.getUk());
+        });
+        return roleSet;
     }
 
     public static void main(String[] args) {

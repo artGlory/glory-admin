@@ -1,6 +1,7 @@
 package com.spring.webadmin.module.adminUser.domain;
 
 import com.spring.common.po.AdminRole;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -35,4 +36,8 @@ public class AdminInfoDTO implements Serializable {
     private AdminRole adminRole;
     @ApiModelProperty(value = "用户标识")
     private String adminUk;
+    @ApiModelProperty(value = "是否绑定GoogleAuthentication")
+    private Boolean isBindGoogleAuthentication;
+    @ApiModelProperty(value = "是否使用GoogleAuthentication登陆")
+    private Boolean isLoginWithGoogleAuthentication;
 }

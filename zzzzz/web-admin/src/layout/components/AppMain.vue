@@ -3,12 +3,21 @@
     <transition name="fade-transform" mode="out-in">
       <router-view :key="key" />
     </transition>
+    <el-tooltip placement="top" content="返回顶部">
+      <back-to-top
+        :visibility-height="300"
+        :back-position="0"
+        transition-name="fade"
+      />
+    </el-tooltip>
   </section>
 </template>
 
 <script>
+import BackToTop from '@/components/BackToTop'
 export default {
   name: 'AppMain',
+  components: { BackToTop },
   computed: {
     key() {
       return this.$route.path
@@ -25,7 +34,7 @@ export default {
   position: relative;
   overflow: hidden;
 }
-.fixed-header+.app-main {
+.fixed-header + .app-main {
   padding-top: 50px;
 }
 </style>

@@ -1,22 +1,32 @@
 <template>
   <div class="navbar">
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <hamburger
+      :is-active="sidebar.opened"
+      class="hamburger-container"
+      @toggleClick="toggleSideBar"
+    />
 
     <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
       <el-dropdown class="user-info-container" trigger="click">
-        <span class="el-dropdown-link">{{ name }} <i class="el-icon-arrow-down el-icon--right"></i> </span>
+        <span class="el-dropdown-link">
+          {{ name }}
+          <i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
+          <!-- <router-link to="/">
             <el-dropdown-item>主页</el-dropdown-item>
+          </router-link> -->
+          <router-link to="/admin-info/admin-self-info">
+            <el-dropdown-item>个人中心</el-dropdown-item>
           </router-link>
           <!-- <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
             <el-dropdown-item>Github</el-dropdown-item>
           </a>
           <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
             <el-dropdown-item>Docs</el-dropdown-item>
-          </a> -->
+          </a>-->
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">登出</span>
           </el-dropdown-item>
@@ -37,10 +47,7 @@ export default {
     Hamburger
   },
   computed: {
-    ...mapGetters([
-      'name',
-      'sidebar'
-    ])
+    ...mapGetters(['name', 'sidebar'])
   },
   methods: {
     toggleSideBar() {
@@ -60,18 +67,18 @@ export default {
   overflow: hidden;
   position: relative;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0,21,41,.08);
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 
   .hamburger-container {
     line-height: 46px;
     height: 100%;
     float: left;
     cursor: pointer;
-    transition: background .3s;
-    -webkit-tap-highlight-color:transparent;
+    transition: background 0.3s;
+    -webkit-tap-highlight-color: transparent;
 
     &:hover {
-      background: rgba(0, 0, 0, .025)
+      background: rgba(0, 0, 0, 0.025);
     }
   }
 
@@ -88,8 +95,8 @@ export default {
       outline: none;
     }
     .el-dropdown-link {
-      cursor:  pointer;
-      color: #409EFF;
+      cursor: pointer;
+      color: #409eff;
     }
     .el-icon-arrow-down {
       font-size: 12px;

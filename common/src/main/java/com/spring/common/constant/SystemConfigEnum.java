@@ -1,14 +1,18 @@
 package com.spring.common.constant;
 
+import static com.spring.common.po.SystemConfig.config_area_admin;
+
 /**
  * 配置表
  */
 public enum SystemConfigEnum {
 
 
-    system_info_name(1, "system_info", "platformName"),
-    system_info_logo(1, "system_info", "logo"),
-    system_info_copyright(1, "system_info", "copyright");
+    system_info_name(config_area_admin, "system_info", "platformName"),
+    system_info_logo(config_area_admin, "system_info", "logo"),
+    system_info_copyright(config_area_admin, "system_info", "copyright"),
+    google_authentication_download_android(config_area_admin, "google_authentication_download", "android"),
+    google_authentication_download_ios(config_area_admin, "google_authentication_download", "ios");
 
 
     /**

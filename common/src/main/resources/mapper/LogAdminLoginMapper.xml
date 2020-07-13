@@ -165,9 +165,15 @@
         <if test="remoteIp!=null and remoteIp!=''">
             and remote_ip = #{remoteIp,jdbcType=VARCHAR}
         </if>
-        <if test="roleUkList!=null and roleUkList.size>0">
-            and role_uk in
-            <foreach collection="roleUkList" item="roleUkTemp" open="(" separator="," close=")">
+        <if test="startTime!=null">
+            and create_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime!=null">
+            and create_time &lt; #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="roleUkSet!=null and roleUkSet.size>0">
+            and user_role_uk in
+            <foreach collection="roleUkSet" item="roleUkTemp" open="(" separator="," close=")">
                 #{roleUkTemp,jdbcType=VARCHAR}
             </foreach>
         </if>

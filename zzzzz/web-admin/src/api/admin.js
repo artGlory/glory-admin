@@ -30,9 +30,9 @@ export function getPageAdmin(data) {
   })
 }
 
-export function updateAdminInfo(data) {
+export function updateAdminRole(data) {
   return request({
-    url: '/api/adminUser/updateAdminInfo',
+    url: '/api/adminUser/updateAdminRole',
     method: 'post',
     data
   })
@@ -54,19 +54,64 @@ export function delAdminInfo(params) {
   })
 }
 
-export function getPageLoginLog(data) {
+export function updateAdminPassword(data) {
   return request({
-    url: '/api/adminLoginLog/getPageLoginLog',
+    url: '/api/adminUser/updateAdminPassword',
     method: 'post',
     data
   })
 }
 
-export function getPageOperateLog(data) {
+export function updateSelfPassword(data) {
   return request({
-    url: '/api/adminOperateLog/getPageOperateLog',
+    url: '/api/adminUser/updateSelfPassword',
     method: 'post',
     data
   })
 }
 
+export function getSelfOperateTimeline() {
+  return request({
+    url: '/api/adminUser/getSelfOperateTimeline',
+    method: 'get'
+  })
+}
+
+export function getGoogleKey() {
+  return request({
+    url: '/api/adminUser/getGoogleKey',
+    method: 'get'
+  })
+}
+
+export function bindGoogleKey(data) {
+  return request({
+    url: '/api/adminUser/bindGoogleKey',
+    method: 'post',
+    data
+  })
+}
+
+export function loginWithGooleAuthentication(params) {
+  return request({
+    url: '/api/adminUser/loginWithGooleAuthentication',
+    method: 'get',
+    params
+  })
+}
+
+export function forbidAdminLogin(params) {
+  return request({
+    url: '/api/adminUser/forbidAdminLogin',
+    method: 'get',
+    params
+  })
+}
+
+export function deleteAdminGoogleKey(params) {
+  return request({
+    url: '/api/adminUser/deleteAdminGoogleKey',
+    method: 'get',
+    params
+  })
+}

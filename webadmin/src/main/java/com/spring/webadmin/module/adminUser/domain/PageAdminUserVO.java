@@ -13,8 +13,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
-* Created by Mybatis Generator on 2020-06-27 11:34:21
-*/
+ * Created by Mybatis Generator on 2020-06-27 11:34:21
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -42,7 +42,7 @@ public class PageAdminUserVO implements Serializable {
      *
      * @mbg.generated
      */
-    @JsonSerialize(using= ToStringSerializer.class)
+    @JsonSerialize(using = ToStringSerializer.class)
     @ApiModelProperty(value = "角色")
     private String roleUk;
 
@@ -52,6 +52,17 @@ public class PageAdminUserVO implements Serializable {
     @ApiModelProperty(value = "角色名称")
     private String roleName;
 
+    /**
+     * 必须使用google两步登陆
+     */
+    @ApiModelProperty(value = "必须使用google两步登陆")
+    private Integer googleLogin;
+
+    /**
+     * 禁止登陆
+     */
+    @ApiModelProperty(value = "禁止登陆")
+    private Integer forbidLogin;
     /**
      * 创建时间
      *

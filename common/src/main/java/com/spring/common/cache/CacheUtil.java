@@ -1,6 +1,5 @@
 package com.spring.common.cache;
 
-import com.spring.common.utils.ObjectUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -120,6 +119,32 @@ public class CacheUtil {
             }
         }
         return t;
+    }
+
+    /**
+     * 设置缓存
+     */
+    public void setCache(String namespace, String key, Object t, long expireSeconds) {
+        if (!isRedisEnable) return;
+
+        redisTemplate.opsForValue().set(getKey(namespace, key), t, expireSeconds, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 设置缓存
+     */
+    public void setCache(String namespace, String key, Object t) {
+        setCache(namespace, key, t, defaultExpireSeconds);
+    }
+
+    /**
+     * 获取缓存
+     */
+    public Object getCache(String namespace, String key) {
+        if (!isRedisEnable) return null;
+
+        Object objectTemp = redisTemplate.opsForValue().get(getKey(namespace, key));
+        return objectTemp;
     }
 
     /**

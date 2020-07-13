@@ -1,9 +1,9 @@
 package com.spring.webadmin.module.adminLoginLog;
 
-import com.spring.common.cacheDao.AdminRoleCacheDao;
-import com.spring.common.cacheDao.LogAdminLoginCacheDao;
 import com.spring.common.domain.PageResultVO;
 import com.spring.common.domain.condition.AdminLoginLogCondition;
+import com.spring.common.mybatis.AdminRoleMapper;
+import com.spring.common.mybatis.LogAdminLoginMapper;
 import com.spring.common.po.AdminRole;
 import com.spring.common.po.LogAdminLogin;
 import com.spring.common.utils.SmartBeanUtil;
@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -37,36 +36,26 @@ import java.util.Set;
 public class AdminLoginLogController {
 
     @Autowired
-    private AdminRoleCacheDao adminRoleCacheDao;
+    private AdminRoleMapper adminRoleMapper;
     @Autowired
-    private LogAdminLoginCacheDao logAdminLoginCacheDao;
+    private LogAdminLoginMapper logAdminLoginMapper;
 
-    @ApiOperation(value = "查询用户登陆日志", notes = "用户登陆日志")
+    @ApiOperation(value = "查询用户登陆日志", notes = "查询当前角色和直属下级角色")
     @PostMapping(Route.AdminLoginLog.getPageLoginLog)
     public ResponseDate<PageResultVO<List<PageLogAdminLoginVO>>> getPageLoginLog(HttpServletRequest httpServletRequest
             , @Valid @RequestBody PageAdminLoginLogCondition pageAdminLoginLogCondition) {
         AdminLoginLogCondition adminLoginLogCondition = SmartBeanUtil.copy(pageAdminLoginLogCondition, AdminLoginLogCondition.class);
         AdminInfoDTO adminInfoDTO = AdminTool.getAdminUser(httpServletRequest);
-        Set<String> roleSet = new HashSet<>();
-        List<AdminRole> adminRoleList = new ArrayList<>();
-        if (RoleToll.isTopRole(adminInfoDTO.getAdminRole())) {
-            adminRoleList = adminRoleCacheDao.listAll();
-        } else {
-            adminRoleList = RoleToll.getAllSubRole(adminInfoDTO.getAdminRole());
-            adminRoleList.add(adminInfoDTO.getAdminRole());
-        }
-        adminRoleList.forEach(adminRole -> {
-            roleSet.add(adminRole.getUk());
-        });
-        adminLoginLogCondition.reCalcIndex();
+        Set<String> roleSet = RoleToll.getSelfRoleAndAllSubRoleUk(adminInfoDTO.getAdminRole());
+        adminLoginLogCondition.setRoleUkSet(roleSet);
         List<PageLogAdminLoginVO> pageLogAdminLoginVOList = new ArrayList<>();
-        long count = logAdminLoginCacheDao.countByCondition(adminLoginLogCondition);
+        long count = logAdminLoginMapper.countByCondition(adminLoginLogCondition);
         if (count > 0) {
-            List<LogAdminLogin> logAdminLoginList = logAdminLoginCacheDao.listByCondition(adminLoginLogCondition);
+            List<LogAdminLogin> logAdminLoginList = logAdminLoginMapper.listByCondition(adminLoginLogCondition);
             pageLogAdminLoginVOList = SmartBeanUtil.copyList(logAdminLoginList, PageLogAdminLoginVO.class);
         }
         pageLogAdminLoginVOList.forEach(pageLogAdminLoginVO -> {
-            AdminRole adminRole = adminRoleCacheDao.selectByPrimaryKey(pageLogAdminLoginVO.getUserRoleUk());
+            AdminRole adminRole = adminRoleMapper.selectByPrimaryKey(pageLogAdminLoginVO.getUserRoleUk());
             if (adminRole != null) {
                 pageLogAdminLoginVO.setUserRoleName(adminRole.getRoleName());
             }

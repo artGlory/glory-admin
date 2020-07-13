@@ -15,6 +15,17 @@
             <el-input v-model="formInline.remoteIp" placeholder="登陆IP"></el-input>
           </el-form-item>
           <el-form-item>
+            <el-date-picker
+              v-model="formInline.timeRange"
+              type="datetimerange"
+              :picker-options="formInline.pickerOptions"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              align="right"
+            ></el-date-picker>
+          </el-form-item>
+          <el-form-item>
             <el-button type="primary" @click="handleSearchM">查询</el-button>
           </el-form-item>
         </el-form>
@@ -37,12 +48,19 @@
                 <el-form-item label="备注">
                   <span>{{ props.row.remark }}</span>
                 </el-form-item>
+                <el-form-item label="cTime">
+                  <span>{{ props.row.createTime }}</span>
+                </el-form-item>
+                <el-form-item label="uTime">
+                  <span>{{ props.row.updateTime }}</span>
+                </el-form-item>
               </el-form>
             </template>
           </el-table-column>
           <el-table-column label="用户名" prop="userName"></el-table-column>
           <el-table-column label="登陆IP" prop="remoteIp"></el-table-column>
           <el-table-column label="登陆地址" prop="remoteAddress"></el-table-column>
+          <el-table-column label="登陆时间" prop="createTime"></el-table-column>
         </el-table>
         <el-pagination
           :current-page="paginationData.currentPage"
@@ -58,14 +76,47 @@
   </div>
 </template>
 <script>
-import { getPageLoginLog } from '@/api/admin'
+import { getPageLoginLog } from '@/api/adminLoginLog'
+import { parseTime } from '@/utils/index'
 export default {
   name: 'AdminLoginLog',
   data() {
     return {
       formInline: {
         userName: '',
-        remoteIp: ''
+        remoteIp: '',
+        timeRange: '',
+        pickerOptions: {
+          shortcuts: [
+            {
+              text: '最近一周',
+              onClick(picker) {
+                const end = new Date()
+                const start = new Date()
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+                picker.$emit('pick', [start, end])
+              }
+            },
+            {
+              text: '最近一个月',
+              onClick(picker) {
+                const end = new Date()
+                const start = new Date()
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+                picker.$emit('pick', [start, end])
+              }
+            },
+            {
+              text: '最近三个月',
+              onClick(picker) {
+                const end = new Date()
+                const start = new Date()
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+                picker.$emit('pick', [start, end])
+              }
+            }
+          ]
+        }
       },
       tableData: [],
       paginationData: {
@@ -82,10 +133,12 @@ export default {
     handleSearchM() {
       this.getPageLoginLogM()
     },
-    handleCurrentChangeM() {
+    handleCurrentChangeM(val) {
+      this.paginationData.currentPage = val
       this.getPageLoginLogM()
     },
-    handleSizeChangeM() {
+    handleSizeChangeM(val) {
+      this.paginationData.pageSize = val
       this.getPageLoginLogM()
     },
     getPageLoginLogM() {
@@ -93,7 +146,9 @@ export default {
         page: this.paginationData.currentPage,
         size: this.paginationData.pageSize,
         userName: this.formInline.userName.trim(),
-        remoteIp: this.formInline.remoteIp.trim()
+        remoteIp: this.formInline.remoteIp.trim(),
+        startTime: parseTime(this.formInline.timeRange[0]),
+        endTime: parseTime(this.formInline.timeRange[1])
       }
       getPageLoginLog(data).then(response => {
         if (response.data) {
@@ -141,8 +196,7 @@ export default {
   color: #99a9bf;
 }
 .demo-table-expand .el-form-item {
-  margin-right: 0;
+  margin-right: 1%;
   margin-bottom: 0;
-  width: 50%;
 }
 </style>

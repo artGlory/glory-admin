@@ -133,5 +133,39 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where uk = #{uk,jdbcType=VARCHAR}
-  </update>
+    </update>
+    <sql id="adminSystemConfigCondition">
+        where 1=1
+        <if test="configArea!=null and configArea!=''">
+            and config_area=#{configArea,jdbcType=VARCHAR}
+        </if>
+        <if test="configGroup!=null and configGroup!=''">
+            and config_group=#{configGroup,jdbcType=VARCHAR}
+        </if>
+        <if test="configKey!=null and configKey!=''">
+            and config_key=#{configKey,jdbcType=VARCHAR}
+        </if>
+    </sql>
+    <select id="listByCondition" parameterType="com.spring.common.domain.condition.AdminSystemConfigCondition"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from system_config
+        <include refid="adminSystemConfigCondition"/>
+        <trim prefix="order by" suffixOverrides=",">
+            <if test="createTimeSortType!=null">
+                create_time ${createTimeSortType},
+            </if>
+        </trim>
+        <if test="page!=null and size!=null">
+            limit #{startIndex,jdbcType=INTEGER},#{endIndex,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="countByCondition" parameterType="com.spring.common.domain.condition.AdminSystemConfigCondition"
+            resultType="long">
+        select
+        count(uk)
+        from system_config
+        <include refid="adminSystemConfigCondition"/>
+    </select>
 </mapper>

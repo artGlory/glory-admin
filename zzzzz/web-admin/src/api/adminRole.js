@@ -31,9 +31,9 @@ export function addRoleInfo(data) {
   })
 }
 
-export function getAllSelfSubRole() {
+export function getAllSubRole() {
   return request({
-    url: '/api/adminRole/getAllSelfSubRole',
+    url: '/api/adminRole/getAllSubRole',
     method: 'get'
   })
 }

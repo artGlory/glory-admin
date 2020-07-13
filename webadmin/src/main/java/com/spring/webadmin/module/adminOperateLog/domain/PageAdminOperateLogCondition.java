@@ -22,6 +22,5 @@ public class PageAdminOperateLogCondition extends BaseCondition {
     @ApiModelProperty(value = "操作类别")
     private String operateName;
     @ApiModelProperty(value = "操作结果")
-//    @
     private Integer result;
 }

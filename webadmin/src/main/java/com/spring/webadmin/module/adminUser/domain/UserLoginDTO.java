@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
@@ -27,4 +28,6 @@ public class UserLoginDTO implements Serializable {
     @NotBlank(message = "密码不能为空")
     @Pattern(regexp = "^[a-zA-Z0-9_]{6,16}", message = "密码：6到16位（字母，数字，下划线）")
     private String password;
+    @ApiModelProperty(value = "google两步登陆")
+    private String googleCode;
 }

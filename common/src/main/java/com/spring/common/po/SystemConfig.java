@@ -1,20 +1,26 @@
 package com.spring.common.po;
 
-import java.io.Serializable;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+import java.util.Date;
+
 /**
-* Created by Mybatis Generator on 2020-06-27 11:34:34
-*/
+ * Created by Mybatis Generator on 2020-06-27 11:34:34
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class SystemConfig implements Serializable {
+
+    /**
+     * 配置所有区域  1：admin
+     */
+    public static final int config_area_admin = 1;
     /**
      * 唯一标识
      *

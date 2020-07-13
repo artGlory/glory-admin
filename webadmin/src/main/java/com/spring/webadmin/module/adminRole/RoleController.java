@@ -1,16 +1,12 @@
 package com.spring.webadmin.module.adminRole;
 
-import com.spring.common.cacheDao.AdminRoleCacheDao;
-import com.spring.common.cacheDao.AdminRolePrivilegeCacheDao;
-import com.spring.common.cacheDao.AdminUserCacheDao;
 import com.spring.common.domain.condition.AdminUserCondition;
 import com.spring.common.exception.ServiceException;
+import com.spring.common.mybatis.AdminRoleMapper;
+import com.spring.common.mybatis.AdminUserMapper;
 import com.spring.common.po.AdminRole;
-import com.spring.common.po.AdminRolePrivilege;
-import com.spring.common.service.AdminUserService;
-import com.spring.common.utils.Moment;
+import com.spring.common.service.AdminRoleService;
 import com.spring.common.utils.SmartBeanUtil;
-import com.spring.common.utils.SnowFlake;
 import com.spring.webadmin.anno.OperateLog;
 import com.spring.webadmin.constant.Route;
 import com.spring.webadmin.domain.vo.ResponseDate;
@@ -33,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Api(tags = "管理员角色接口")
@@ -40,15 +37,15 @@ import java.util.List;
 @RequestMapping(Route.path + Route.AdminRole.path)
 public class RoleController {
     @Autowired
-    private AdminUserService adminUserService;
+    private AdminRoleService adminRoleService;
     @Autowired
-    private AdminRoleCacheDao adminRoleCacheDao;
+    private AdminRoleMapper adminRoleMapper;
     @Autowired
-    private AdminUserCacheDao adminUserCacheDao;
-    @Autowired
-    private AdminRolePrivilegeCacheDao adminRolePrivilegeCacheDao;
+    private AdminUserMapper adminUserMapper;
 
-    @ApiOperation(value = "获取管理员角色", notes = "获取直属下级角色树形结构（包含自己）；顶级角色获取所有角色结构")
+    @ApiOperation(value = "获取管理员角色"
+            , notes = "获取直属下级角色和当前角色的树形结构；" +
+            "顶级角色获取所有角色结构")
     @GetMapping(Route.AdminRole.getRolesTree)
     public ResponseDate<List<AdminRoleTreeVO>> getRolesTree(HttpServletRequest httpServletRequest) {
         AdminInfoDTO adminInfoDTO = AdminTool.getAdminUser(httpServletRequest);
@@ -66,92 +63,82 @@ public class RoleController {
     }
 
     @OperateLog
-    @ApiOperation(value = "添加角色", notes = "添加管理员角色;只能添加直属下级角色;顶级角色操作所有非顶级角色")
+    @ApiOperation(value = "添加角色"
+            , notes = "只能添加直属下级角色;不能添加顶级角色")
     @PostMapping(Route.AdminRole.addRole)
     public ResponseDate addRole(HttpServletRequest httpServletRequest
             , @Valid @RequestBody AddAdminRoleDTO addAdminRoleDTO) {
         AdminInfoDTO adminInfoDTO = AdminTool.getAdminUser(httpServletRequest);
-
-        if ((RoleToll.isTopRole(adminInfoDTO.getAdminRole()) && addAdminRoleDTO.getParentUk() != null)
-                || RoleToll.isEqualRole(adminInfoDTO.getAdminRole().getUk(), addAdminRoleDTO.getParentUk())
-                || RoleToll.isDirectSubRole(adminInfoDTO.getAdminRole().getUk(), addAdminRoleDTO.getParentUk())
-        ) {
-            AdminRole adminRole = SmartBeanUtil.copy(addAdminRoleDTO, AdminRole.class);
-            adminRole.setUk(UkTool.getUk32());
-            adminRole.setCreateTime(new Moment().toDate());
-            adminRole.setUpdateTime(adminRole.getCreateTime());
-            int result = adminUserService.addAdminRole(adminRole);
-            return ResponseDate.builder()
-                    .success(result == 1)
-                    .build();
-        } else {
-            throw new IllegalArgumentException("权限不足");
+        if (addAdminRoleDTO.getParentUk() == null) throw new IllegalArgumentException("父角色不能为空");
+        if (RoleToll.isTopRole(addAdminRoleDTO.getParentUk())) throw new IllegalArgumentException("不能添加顶级角色");
+        boolean hasPermission = false;
+        if (RoleToll.isDirectSubRole(adminInfoDTO.getAdminRole().getUk(), addAdminRoleDTO.getParentUk())
+                || RoleToll.isEqualRole(adminInfoDTO.getAdminRole().getUk(), addAdminRoleDTO.getParentUk())) {
+            hasPermission = true;
         }
+        if (hasPermission == false) throw new IllegalArgumentException("权限不足");
+
+        AdminRole adminRole = SmartBeanUtil.copy(addAdminRoleDTO, AdminRole.class);
+        adminRole.setUk(UkTool.getUk32());
+        int result = adminRoleService.addAdminRole(adminRole);
+        return ResponseDate.builder()
+                .success(result == 1)
+                .build();
     }
 
     @OperateLog
-    @ApiOperation(value = "更改角色", notes = "更改管理员角色；只能修改直属下级角色；顶级角色操作所有非顶级角色")
+    @ApiOperation(value = "修改角色", notes = "只能修改直属下级角色和当前角色")
     @PostMapping(Route.AdminRole.updateRole)
     public ResponseDate updateRole(HttpServletRequest httpServletRequest
             , @Valid @RequestBody UpdateAdminRoleDTO updateAdminRoleVO) {
         AdminInfoDTO adminInfoDTO = AdminTool.getAdminUser(httpServletRequest);
-        AdminRole adminRoleOld = adminRoleCacheDao.selectByPrimaryKey(updateAdminRoleVO.getUk());
+        AdminRole adminRoleOld = adminRoleMapper.selectByPrimaryKey(updateAdminRoleVO.getUk());
         if (adminRoleOld == null) throw new IllegalArgumentException("角色不存在");
-        if ((RoleToll.isTopRole(adminInfoDTO.getAdminRole()) && adminRoleOld.getParentUk() != null)
-                || RoleToll.isDirectSubRole(adminInfoDTO.getAdminRole().getUk(), adminRoleOld.getUk())
-        ) {
-            SmartBeanUtil.copyProperties(updateAdminRoleVO, adminRoleOld);
-            adminRoleOld.setUpdateTime(new Moment().toDate());
-
-            int result = adminUserService.updateAdminRole(adminRoleOld);
-            return ResponseDate.builder()
-                    .success(result == 1)
-                    .build();
-        } else {
-            throw new IllegalArgumentException("权限不足");
+        boolean hasPermission = false;
+        if (RoleToll.isEqualRole(adminInfoDTO.getAdminRole().getUk(), adminRoleOld.getUk())//当前角色
+                || RoleToll.isDirectSubRole(adminInfoDTO.getAdminRole().getUk(), adminRoleOld.getUk())) {//直属下级
+            hasPermission = true;
         }
+        if (!hasPermission) throw new IllegalArgumentException("权限不足");
+
+        SmartBeanUtil.copyProperties(updateAdminRoleVO, adminRoleOld);
+        int result = adminRoleService.updateAdminRoleNameAndDesc(adminRoleOld);
+        return ResponseDate.builder()
+                .success(result == 1)
+                .build();
     }
 
     @OperateLog
-    @ApiOperation(value = "删除角色", notes = "删除管理员角色；只能操作直属下级角色;顶级角色操作所有非顶级角色")
+    @ApiOperation(value = "删除角色", notes = "只能删除直属下级角色")
     @GetMapping(Route.AdminRole.deleteRole)
     public ResponseDate deleteRole(HttpServletRequest httpServletRequest, @RequestParam(required = true) String roleUk) {
         AdminInfoDTO adminInfoDTO = AdminTool.getAdminUser(httpServletRequest);
-        AdminRole delAdminRole = adminRoleCacheDao.selectByPrimaryKey(roleUk);
+        AdminRole delAdminRole = adminRoleMapper.selectByPrimaryKey(roleUk);
         if (delAdminRole == null) throw new IllegalArgumentException("角色不存在");
-        if ((RoleToll.isTopRole(adminInfoDTO.getAdminRole()) && !RoleToll.isTopRole(delAdminRole))
-                || RoleToll.isDirectSubRole(adminInfoDTO.getAdminRole().getUk(), delAdminRole.getUk())
-        ) {
-            if (adminRoleCacheDao.listAllByParentUk(delAdminRole.getUk()).size() > 0)
-                throw new ServiceException("包含子角色，请先删除子角色");
-            AdminUserCondition adminUserCondition = AdminUserCondition.builder().build();
-            adminUserCondition.setRoleUkList(new ArrayList<>());
-            adminUserCondition.getRoleUkList().add(roleUk);
-            if (adminUserCacheDao.countByCondition(adminUserCondition) > 0) {
-                throw new IllegalArgumentException("包含用户，请先删除用户");
-            }
-            List<AdminRolePrivilege> adminRolePrivilegeList=adminRolePrivilegeCacheDao.listByRoleUk(delAdminRole.getUk());
-            adminRolePrivilegeList.forEach(adminRolePrivilege -> {
-                adminRolePrivilegeCacheDao.deleteByPrimaryKey(adminRolePrivilege.getUk());
-            });
-            int result = adminUserService.deleteAdminRole(delAdminRole);
-            return ResponseDate.builder()
-                    .success(result == 1)
-                    .build();
-        } else {
+        if (RoleToll.isDirectSubRole(adminInfoDTO.getAdminRole().getUk(), delAdminRole.getUk()) == false)
             throw new IllegalArgumentException("权限不足");
+
+        if (RoleToll.getAllSubRole(delAdminRole).size() > 0)
+            throw new ServiceException("包含子角色，请先删除子角色");
+        AdminUserCondition adminUserCondition = AdminUserCondition.builder().build();
+        adminUserCondition.setRoleUkSet(RoleToll.getSelfRoleAndAllSubRoleUk(delAdminRole));
+        if (adminUserMapper.countByCondition(adminUserCondition) > 0) {
+            throw new IllegalArgumentException("包含用户，请先删除用户");
         }
+        int result = adminRoleService.deleteAdminRole(delAdminRole);
+        return ResponseDate.builder()
+                .success(result == 1)
+                .build();
     }
 
-    @ApiModelProperty(value = "获取角色", notes = "获取角色（自身角色+直属下级角色）；顶级角色获取所有角色")
+    @ApiModelProperty(value = "获取角色", notes = "获取直属下级和当前角色")
     @GetMapping(Route.AdminRole.getAllSelfSubRole)
     public ResponseDate<List<SelfSubAdminRoleVO>> getAllSelfSubRole(HttpServletRequest httpServletRequest) {
         AdminInfoDTO adminInfoDTO = AdminTool.getAdminUser(httpServletRequest);
+        Set<String> roleUkSet = RoleToll.getSelfRoleAndAllSubRoleUk(adminInfoDTO.getAdminRole());
         List<AdminRole> adminRoleList = new ArrayList<>();
-        if (RoleToll.isTopRole(adminInfoDTO.getAdminRole())) {
-            adminRoleList = adminRoleCacheDao.listAll();
-        } else {
-            adminRoleList = RoleToll.getAllSubRole(adminInfoDTO.getAdminRole());
+        for (String roleUk : roleUkSet) {
+            adminRoleList.add(adminRoleMapper.selectByPrimaryKey(roleUk));
         }
         List<SelfSubAdminRoleVO> selfSubAdminRoleVOList = SmartBeanUtil.copyList(adminRoleList, SelfSubAdminRoleVO.class);
         return ResponseDate.<List<SelfSubAdminRoleVO>>builder()
@@ -160,5 +147,19 @@ public class RoleController {
                 .build();
     }
 
-
+    @ApiModelProperty(value = "获取角色", notes = "获取直属下级")
+    @GetMapping(Route.AdminRole.getAllSubRole)
+    public ResponseDate<List<SelfSubAdminRoleVO>> getAllSubRole(HttpServletRequest httpServletRequest) {
+        AdminInfoDTO adminInfoDTO = AdminTool.getAdminUser(httpServletRequest);
+        Set<String> roleUkSet = RoleToll.getAllSubRoleUk(adminInfoDTO.getAdminRole());
+        List<AdminRole> adminRoleList = new ArrayList<>();
+        for (String roleUk : roleUkSet) {
+            adminRoleList.add(adminRoleMapper.selectByPrimaryKey(roleUk));
+        }
+        List<SelfSubAdminRoleVO> selfSubAdminRoleVOList = SmartBeanUtil.copyList(adminRoleList, SelfSubAdminRoleVO.class);
+        return ResponseDate.<List<SelfSubAdminRoleVO>>builder()
+                .success(true)
+                .data(selfSubAdminRoleVOList)
+                .build();
+    }
 }

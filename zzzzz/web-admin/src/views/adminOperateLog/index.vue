@@ -15,6 +15,17 @@
             <el-input v-model="formInline.operateName" placeholder="操作名称"></el-input>
           </el-form-item>
           <el-form-item>
+            <el-date-picker
+              v-model="formInline.timeRange"
+              type="datetimerange"
+              :picker-options="formInline.pickerOptions"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              align="right"
+            ></el-date-picker>
+          </el-form-item>
+          <el-form-item>
             <el-select v-model="resultValue" placeholder="请选择">
               <el-option
                 v-for="item in options"
@@ -32,9 +43,6 @@
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-form label-position="left" inline class="demo-table-expand">
-                <el-form-item label="标识">
-                  <span>{{ props.row.uk }}</span>
-                </el-form-item>
                 <el-form-item label="操作人">
                   <span>{{ props.row.operator }}</span>
                 </el-form-item>
@@ -56,15 +64,19 @@
                 <el-form-item label="失败原因">
                   <span>{{ props.row.failReason }}</span>
                 </el-form-item>
-                <el-form-item label="操作时间">
+                <el-form-item label="cTime">
                   <span>{{ props.row.createTime }}</span>
+                </el-form-item>
+                <el-form-item label="uTime">
+                  <span>{{ props.row.updateTime }}</span>
                 </el-form-item>
               </el-form>
             </template>
           </el-table-column>
           <el-table-column label="操作人" prop="operator"></el-table-column>
           <el-table-column label="操作类型" prop="operateName"></el-table-column>
-          <el-table-column label="操作结果" prop="result"></el-table-column>
+          <el-table-column label="操作结果" prop="result" :formatter="formatResultM"></el-table-column>
+          <el-table-column label="操作时间" prop="createTime"></el-table-column>
         </el-table>
         <el-pagination
           :current-page="paginationData.currentPage"
@@ -80,14 +92,47 @@
   </div>
 </template>
 <script>
-import { getPageOperateLog } from '@/api/admin'
+import { getPageOperateLog } from '@/api/adminOperateLog'
+import { parseTime } from '@/utils/index'
 export default {
   name: 'AdminLoginLog',
   data() {
     return {
       formInline: {
         operator: '',
-        operateName: ''
+        operateName: '',
+        timeRange: '',
+        pickerOptions: {
+          shortcuts: [
+            {
+              text: '最近一周',
+              onClick(picker) {
+                const end = new Date()
+                const start = new Date()
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+                picker.$emit('pick', [start, end])
+              }
+            },
+            {
+              text: '最近一个月',
+              onClick(picker) {
+                const end = new Date()
+                const start = new Date()
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+                picker.$emit('pick', [start, end])
+              }
+            },
+            {
+              text: '最近三个月',
+              onClick(picker) {
+                const end = new Date()
+                const start = new Date()
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+                picker.$emit('pick', [start, end])
+              }
+            }
+          ]
+        }
       },
       tableData: [],
       paginationData: {
@@ -119,10 +164,12 @@ export default {
     handleSearchM() {
       this.getPageOperateLogM()
     },
-    handleCurrentChangeM() {
+    handleCurrentChangeM(val) {
+      this.paginationData.currentPage = val
       this.getPageOperateLogM()
     },
-    handleSizeChangeM() {
+    handleSizeChangeM(val) {
+      this.paginationData.pageSize = val
       this.getPageOperateLogM()
     },
     getPageOperateLogM() {
@@ -131,7 +178,9 @@ export default {
         size: this.paginationData.pageSize,
         operator: this.formInline.operator.trim(),
         operateName: this.formInline.operateName.trim(),
-        result: this.resultValue
+        result: this.resultValue,
+        startTime: parseTime(this.formInline.timeRange[0]),
+        endTime: parseTime(this.formInline.timeRange[1])
       }
       getPageOperateLog(data).then(response => {
         if (response.data) {
@@ -141,6 +190,15 @@ export default {
           this.paginationData.pageSize = response.data.pageSize
         }
       })
+    },
+    formatResultM(row) {
+      let showInfo = row.result
+      if (row.result === 1) {
+        showInfo = '成功'
+      } else if (row.result === 0) {
+        showInfo = '失败'
+      }
+      return showInfo
     }
   }
 }
@@ -179,8 +237,7 @@ export default {
   color: #99a9bf;
 }
 .demo-table-expand .el-form-item {
-  margin-right: 0;
+  margin-right: 1%;
   margin-bottom: 0;
-  width: 50%;
 }
 </style>

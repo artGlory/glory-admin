@@ -31,4 +31,8 @@ public class UserInfoVO implements Serializable {
     private String systemLogo;
     @ApiModelProperty(value = "系统版权")
     private String systemCopyright;
+    @ApiModelProperty(value = "是否绑定GoogleAuthentication")
+    private Boolean isBindGoogleAuthentication;
+    @ApiModelProperty(value = "是否使用GoogleAuthentication登陆")
+    private Boolean isLoginWithGoogleAuthentication;
 }

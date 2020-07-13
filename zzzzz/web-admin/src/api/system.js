@@ -6,3 +6,26 @@ export function getPlatformInfo() {
     method: 'get'
   })
 }
+
+export function getPageConfig(data) {
+  return request({
+    url: '/api/amdinSystem/getPageConfig',
+    method: 'post',
+    data
+  })
+}
+
+export function updateSystemConfig(data) {
+  return request({
+    url: '/api/amdinSystem/updateSystemConfig',
+    method: 'post',
+    data
+  })
+}
+
+export function getGoogleAuthenticationDownload() {
+  return request({
+    url: '/api/amdinSystem/getGoogleAuthenticationDownload',
+    method: 'get'
+  })
+}

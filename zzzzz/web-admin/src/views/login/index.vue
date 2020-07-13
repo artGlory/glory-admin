@@ -87,7 +87,8 @@ export default {
     return {
       loginForm: {
         username: '',
-        password: ''
+        password: '',
+        googleCode: ''
       },
       loginRules: {
         username: [
@@ -133,8 +134,26 @@ export default {
           this.loading = true
           this.$store
             .dispatch('admin/login', this.loginForm)
-            .then(() => {
-              this.$router.push({ path: this.redirect || '/' })
+            .then(data => {
+              if (data.needGoogleCode === true) {
+                this.$prompt('请输入Google身份验证器动态密码', '提示', {
+                  confirmButtonText: '确定',
+                  inputPattern: /^\d{6}$/
+                })
+                  .then(({ value }) => {
+                    this.loginForm.googleCode = value
+                    this.handleLogin()
+                    this.loginForm.googleCode = ''
+                  })
+                  .catch(() => {
+                    this.$message({
+                      type: 'error',
+                      message: '取消输入Google身份验证器动态密码'
+                    })
+                  })
+              } else {
+                this.$router.push({ path: this.redirect || '/' })
+              }
               this.loading = false
             })
             .catch(() => {

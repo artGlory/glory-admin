@@ -19,5 +19,6 @@ public class TokenVO implements Serializable {
     private static final long serialVersionUID = -6346885437082656720L;
     @ApiModelProperty(value = "token")
     private String token;
-
+    @ApiModelProperty(value = "是否需要google两步登陆")
+    private Boolean isNeedGoogleCode;
 }

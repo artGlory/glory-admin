@@ -8,6 +8,8 @@ const getters = {
   system_name: state => state.admin.system.name,
   system_logo: state => state.admin.system.logo,
   system_copyright: state => state.admin.system.copyright,
-  permission_routes: state => state.permission.routes
+  permission_routes: state => state.permission.routes,
+  isBindGoogleAuthentication: state => state.admin.isBindGoogleAuthentication,
+  isLoginWithGoogleAuthentication: state => state.admin.isLoginWithGoogleAuthentication
 }
 export default getters

@@ -7,7 +7,9 @@ import lombok.*;
 
 import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,6 +27,6 @@ public class AdminLoginLogCondition extends BaseCondition {
     @ApiModelProperty(value = "用户ip")
     private String remoteIp;
     @ApiModelProperty(value = "角色列表")
-    List<String> roleUkList = new ArrayList<>();
+    Set<String> roleUkSet = new HashSet<>();
 
 }

@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
@@ -17,7 +19,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel
-public class UpdateAdminUserDTO implements Serializable {
+public class UpdateAdminUserPasswordVO implements Serializable {
     /**
      * 唯一标识
      *
@@ -26,14 +28,16 @@ public class UpdateAdminUserDTO implements Serializable {
     @ApiModelProperty(value = "唯一标识")
     private String uk;
 
-
     /**
-     * 角色
+     * 用户密码
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "角色标识")
-    private String roleUk;
+    @ApiModelProperty(value = "用户密码，新")
+    @NotBlank(message = "密码不能为空")
+    @Pattern(regexp = "^[a-zA-Z0-9_]{6,16}", message = "密码：6到16位（字母，数字，下划线）")
+    private String passwordNew;
+
 
     private static final long serialVersionUID = 1L;
 }

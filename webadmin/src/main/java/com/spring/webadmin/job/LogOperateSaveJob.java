@@ -1,6 +1,6 @@
 package com.spring.webadmin.job;
 
-import com.spring.common.cacheDao.LogOperateCacheDao;
+import com.spring.common.mybatis.LogOperateMapper;
 import com.spring.common.po.LogOperate;
 import com.spring.common.utils.PrintUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Component
 public class LogOperateSaveJob {
     @Autowired
-    private LogOperateCacheDao logOperateCacheDao;
+    private LogOperateMapper logOperateMapper;
     /**
      * 日志队列
      */
@@ -39,7 +39,7 @@ public class LogOperateSaveJob {
                 logOperateList.add(concurrentLinkedQueue.poll());
             }
             for (LogOperate logOperate : logOperateList) {
-                int result = logOperateCacheDao.insert(logOperate);
+                int result = logOperateMapper.insert(logOperate);
                 if (result != 1) {
                     log.error("操作日志插入失败" + ToStringBuilder.reflectionToString(logOperate));
                 }

@@ -39,15 +39,42 @@
           </el-form-item>
         </el-form>
         <el-table :data="tableDate.data" style="width: 100%" size="medium">
-          <el-table-column prop="uk" label="标识"></el-table-column>
+          <el-table-column type="expand">
+            <template slot-scope="props">
+              <el-form label-position="left" inline class="demo-table-expand">
+                <el-form-item label="标识">
+                  <span>{{ props.row.uk }}</span>
+                </el-form-item>
+                <el-form-item label="cTime">
+                  <span>{{ props.row.createTime }}</span>
+                </el-form-item>
+                <el-form-item label="uTime">
+                  <span>{{ props.row.updateTime }}</span>
+                </el-form-item>
+              </el-form>
+            </template>
+          </el-table-column>
           <el-table-column prop="username" label="用户名"></el-table-column>
           <el-table-column prop="roleName" label="角色名称"></el-table-column>
+          <el-table-column prop="googleLogin" label="是否Google登陆" :formatter="formatGoogleLoginM"></el-table-column>
+          <el-table-column prop="forbidLogin" label="登陆状态" :formatter="formatForbidLoginResultM"></el-table-column>
           <el-table-column prop="createTime" label="创建时间"></el-table-column>
           <el-table-column v-if="false" prop="updateTime" label="修改时间"></el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="showInfoM(scope.row)">查看与编辑</el-button>
-              <el-button type="text" size="small" @click="deleteInfoM(scope.row)">删除</el-button>
+              <el-dropdown>
+                <span class="el-dropdown-link">
+                  操作
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item @click.native="showUserRoleM(scope.row)">修改用户角色</el-dropdown-item>
+                  <el-dropdown-item @click.native="updateUserPasswordM(scope.row)">修改用户密码</el-dropdown-item>
+                  <el-dropdown-item @click.native="updateAdminLoginStatusM(scope.row)">修改用户登陆状态</el-dropdown-item>
+                  <el-dropdown-item @click.native="deleteGoogleBindM(scope.row)">删除Google绑定</el-dropdown-item>
+                  <el-dropdown-item @click.native="deleteInfoM(scope.row)">删除用户</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </template>
           </el-table-column>
         </el-table>
@@ -62,8 +89,8 @@
         ></el-pagination>
       </el-main>
     </el-container>
-    <!-- 用户信息查看与更改 -->
-    <el-dialog title="用户信息" :visible.sync="dialog01.dialogFormVisible">
+    <!-- 修改用户角色 -->
+    <el-dialog title="修改用户角色" :visible.sync="dialog01.dialogFormVisible">
       <el-form :model="dialog01.form" label-position="left" label-width="80px" size="mini">
         <el-form-item label="用户名称">
           <el-input v-model="dialog01.form.username" autocomplete="off" disabled></el-input>
@@ -78,13 +105,10 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="创建时间">
-          <el-input v-model="dialog01.form.createTime" autocomplete="off" disabled></el-input>
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialog01.dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="updateAdminInfoM">确 定</el-button>
+        <el-button type="primary" @click="updateAdminRoleM">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 添加用户 -->
@@ -109,16 +133,36 @@
         <el-button type="primary" @click="addAdminInfoM">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 修改用户密码 -->
+    <el-dialog title="修改用户密码" :visible.sync="dialogUpdatePassword.dialogFormVisible">
+      <el-form
+        :model="dialogUpdatePassword.form"
+        label-position="left"
+        label-width="80px"
+        size="mini"
+      >
+        <el-form-item label="新密码">
+          <el-input v-model="dialogUpdatePassword.form.passwordNew" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogUpdatePassword.dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateAdminPasswordM">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { parseTime } from '@/utils/index'
-import { getAllSelfSubRole } from '@/api/adminRole'
+import { getAllSubRole } from '@/api/adminRole'
 import {
   getPageAdmin,
-  updateAdminInfo,
+  updateAdminRole,
   addAdminInfo,
-  delAdminInfo
+  delAdminInfo,
+  updateAdminPassword,
+  forbidAdminLogin,
+  deleteAdminGoogleKey
 } from '@/api/admin'
 export default {
   name: 'AdminUser',
@@ -191,6 +235,13 @@ export default {
           updateTime: ''
         },
         dialogFormVisible: false
+      },
+      dialogUpdatePassword: {
+        form: {
+          uk: '',
+          passwordNew: ''
+        },
+        dialogFormVisible: false
       }
     }
   },
@@ -198,10 +249,26 @@ export default {
   watch: {},
   mounted() {
     this.getPageAdminUserM()
-    this.getAllSelfSubRoleM()
+    this.getAllSubRoleM()
   },
   methods: {
-    showInfoM(row) {
+    updateUserPasswordM(data) {
+      this.dialogUpdatePassword.form.uk = data.uk
+      this.dialogUpdatePassword.dialogFormVisible = true
+    },
+    updateAdminPasswordM() {
+      const data = {
+        uk: this.dialogUpdatePassword.form.uk,
+        passwordNew: this.dialogUpdatePassword.form.passwordNew
+      }
+      updateAdminPassword(data).then(response => {
+        if (response.success) {
+          this.$message.success('修改成功')
+          this.dialogUpdatePassword.dialogFormVisible = false
+        }
+      })
+    },
+    showUserRoleM(row) {
       this.dialog01.form.uk = row.uk
       this.dialog01.form.username = row.username
       this.dialog01.form.roleUk = row.roleUk
@@ -240,19 +307,19 @@ export default {
         }
       })
     },
-    getAllSelfSubRoleM() {
-      getAllSelfSubRole().then(response => {
+    getAllSubRoleM() {
+      getAllSubRole().then(response => {
         if (response.data) {
           this.roleList = response.data
         }
       })
     },
-    updateAdminInfoM() {
+    updateAdminRoleM() {
       const data = {
         uk: this.dialog01.form.uk,
         roleUk: this.dialog01.form.roleUk
       }
-      updateAdminInfo(data).then(response => {
+      updateAdminRole(data).then(response => {
         if (response.success) {
           this.$message.success('更新成功')
           this.getPageAdminUserM()
@@ -274,11 +341,10 @@ export default {
       })
     },
     deleteInfoM(data) {
-      console.log(data)
       const params = {
         uk: data.uk
       }
-      this.$confirm('用户删除后将无法恢复', '是否继续?', '提示', {
+      this.$confirm('用户删除后将无法恢复, 是否继续', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -300,6 +366,85 @@ export default {
             message: '已取消删除'
           })
         })
+    },
+    updateAdminLoginStatusM(data) {
+      console.log(data)
+      const params = {
+        uk: data.uk
+      }
+      const showMessage =
+        data.forbidLogin === 1
+          ? '允许用户登陆, 是否继续'
+          : '禁止用户登陆, 是否继续'
+      this.$confirm(showMessage, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          forbidAdminLogin(params).then(response => {
+            if (response.success) {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+            }
+            this.getPageAdminUserM()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消操作'
+          })
+        })
+    },
+    deleteGoogleBindM(data) {
+      console.log(data)
+      const params = {
+        uk: data.uk
+      }
+      const showMessage = '删除Google绑定，会降低账号的安全系数, 是否继续'
+      this.$confirm(showMessage, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          deleteAdminGoogleKey(params).then(response => {
+            if (response.success) {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+            }
+            this.getPageAdminUserM()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消操作'
+          })
+        })
+    },
+    formatGoogleLoginM(row) {
+      let showMessage = row.googleLogin
+      if (row.googleLogin === 1) {
+        showMessage = '是'
+      } else if (row.googleLogin === 0) {
+        showMessage = '否'
+      }
+      return showMessage
+    },
+    formatForbidLoginResultM(row) {
+      let showMessage = row.forbidLogin
+      if (row.forbidLogin === 1) {
+        showMessage = '禁止登陆'
+      } else if (row.forbidLogin === 0) {
+        showMessage = '允许登陆'
+      }
+      return showMessage
     }
   }
 }
@@ -325,11 +470,26 @@ export default {
     & .el-form {
     }
     & .el-table {
+      & .el-dropdown-link {
+        cursor: pointer;
+        color: #409eff;
+      }
     }
     & .el-pagination {
       float: right;
       margin-top: 10px;
     }
   }
+}
+.demo-table-expand {
+  font-size: 0;
+}
+.demo-table-expand label {
+  width: 90px;
+  color: #99a9bf;
+}
+.demo-table-expand .el-form-item {
+  margin-right: 1%;
+  margin-bottom: 0;
 }
 </style>

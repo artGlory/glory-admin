@@ -1,7 +1,7 @@
 package com.spring.webadmin.module.adminPrivilege.tools;
 
 
-import com.spring.common.cacheDao.AdminPrivilegeCacheDao;
+import com.spring.common.mybatis.AdminPrivilegeMapper;
 import com.spring.common.po.AdminPrivilege;
 import com.spring.webadmin.constant.CommonConstants;
 import com.spring.webadmin.module.adminPrivilege.domain.AdminPrivilegeTreeVO;
@@ -13,15 +13,16 @@ import java.util.*;
 @Component
 public class PrivilegeTool {
 
-    private static AdminPrivilegeCacheDao adminPrivilegeCacheDao;
+    private static AdminPrivilegeMapper adminPrivilegeMapper;
 
     @Autowired
-    private void setAdminPrivilegeCacheDao(AdminPrivilegeCacheDao adminPrivilegeCacheDao) {
-        PrivilegeTool.adminPrivilegeCacheDao = adminPrivilegeCacheDao;
+    public void setAdminPrivilegeMapper(AdminPrivilegeMapper adminPrivilegeMapper) {
+        PrivilegeTool.adminPrivilegeMapper = adminPrivilegeMapper;
     }
 
+
     public static AdminPrivilege getByPrivilegePath(String privilegePath) {
-        return adminPrivilegeCacheDao.selectByPath(privilegePath);
+        return adminPrivilegeMapper.selectByPath(privilegePath);
     }
 
     /**
@@ -84,10 +85,10 @@ public class PrivilegeTool {
      */
     public static Set<String> getAllParentPrivilege(String privilegeUk) {
         Set<String> set = new HashSet<>();
-        AdminPrivilege adminPrivilege = adminPrivilegeCacheDao.selectByPrimaryKey(privilegeUk);
+        AdminPrivilege adminPrivilege = adminPrivilegeMapper.selectByPrimaryKey(privilegeUk);
         while (true) {
-            adminPrivilege = adminPrivilegeCacheDao.selectByPrimaryKey(adminPrivilege.getParentUk());
-            if (adminPrivilege==null) break;
+            adminPrivilege = adminPrivilegeMapper.selectByPrimaryKey(adminPrivilege.getParentUk());
+            if (adminPrivilege == null) break;
             set.add(adminPrivilege.getUk());
             if (isTopPrivilege(adminPrivilege)) break;
         }

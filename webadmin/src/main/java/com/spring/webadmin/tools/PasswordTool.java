@@ -20,10 +20,10 @@ public class PasswordTool {
      * 验证管理员密码是否正确
      *
      * @param password
-     * @param tPassword
+     * @param encryptionPassword
      * @return
      */
-    public static boolean validateAdminUserPassword(String password, String tPassword) {
-        return tPassword.equals(MD5Tool.md5TO32(password).toLowerCase());
+    public static boolean validateAdminUserPassword(String password, String encryptionPassword) {
+        return encryptionPassword.equals(MD5Tool.md5TO32(password).toLowerCase());
     }
 }

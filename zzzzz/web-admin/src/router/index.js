@@ -66,21 +66,9 @@ export const constantRoutes = [
 export const asyncRoutes = [
 
   {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://github.com/artGlory/glory-admin',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
-
-  {
     path: '/admin-manage',
     component: Layout,
     redirect: '/amdin-manage/admin-manage',
-    name: 'BackendManage',
     meta: { title: '后台管理', icon: 'admin-fill', permissions: ['3c9ef7b90e5a43cc863941f0f2368021'] },
     children: [
       {
@@ -99,13 +87,33 @@ export const asyncRoutes = [
         path: '/amdin-manage/admin-login-log',
         name: 'AdminLoginLog',
         component: () => import('@/views/adminLoginLog/index'),
-        meta: { title: '用户登陆日志' }
+        meta: { title: '用户登陆日志', permissions: ['70d21e7631c64862b984b40abe41ad42'] }
       },
       {
         path: '/amdin-manage/admin-operate-log',
         name: 'AdminOperateLog',
         component: () => import('@/views/adminOperateLog/index'),
-        meta: { title: '用户操作日志' }
+        meta: { title: '用户操作日志', permissions: ['7207be3756b84502be62817adb7e516e'] }
+      },
+      {
+        path: '/amdin-manage/admin-system-config',
+        name: 'AdminSystemConfig',
+        component: () => import('@/views/adminSystemConfig/index'),
+        meta: { title: '系统配置', permissions: ['e82d39224c5347b69aca69e88ab0eb21'] }
+      }
+    ]
+  },
+  {
+    path: '/admin-info',
+    component: Layout,
+    redirect: '/admin-info/admin-self-info',
+    meta: { title: '个人主页', icon: 'self-info', permissions: ['57747d216fee41eaa677602a9515a525'] },
+    children: [
+      {
+        path: '/admin-info/admin-self-info',
+        name: 'AdminInfo',
+        component: () => import('@/views/adminInfo/index'),
+        meta: { title: '个人中心', permissions: ['6470dc3dcc0c4f1a9022e223ec41c749'] }
       }
     ]
   },

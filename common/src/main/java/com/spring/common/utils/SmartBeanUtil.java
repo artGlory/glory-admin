@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class SmartBeanUtil {
 
     /**
-     * 复制bean的属性
+     * 复制bean的属性,如果source某属性为空，不会覆盖target的此属性
      *
      * @param source 源 要复制的对象
      * @param target 目标 复制到此对象
