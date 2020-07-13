@@ -35,13 +35,7 @@
 
 本项目使用mysql数据库,可以使用数据库脚本创建2个数据库 *multi_module_db*  *multi_module_db_01*
 
-![](https://github.com/artGlory/IMG/blob/master/glory-admin/mysql01.jpg)
-
-![](https://github.com/artGlory/IMG/blob/master/glory-admin/mysql02.jpg)
-
-数据库进阶，使用[Flyway](https://flywaydb.org/)做数据库的版本控制
-
-![](https://github.com/artGlory/IMG/blob/master/glory-admin/flyway01.jpg)
+![](https://github.com/artGlory/IMG/blob/master/glory-admin/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9B%E5%BB%BA.jpg)
 
 ### 项目启动
 
