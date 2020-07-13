@@ -80,7 +80,7 @@
 
 ### 项目结构
 
-1. common处理数据库操作和事务操作
+1. common：数据操作，数据缓存，事务操作
 
 2. admin只做controller，用于处理用户请求和后台业务之间的转发。（why这样设计呢？）because有些中间件系统需要用RPC框架做请求转发，because有些机密系统不屑于用springMVC而是选择vertx自主开发请求层。
 
