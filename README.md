@@ -40,9 +40,7 @@
 
 ### 系统架构
 
-
-
-
+![](https://github.com/artGlory/IMG/blob/master/glory-admin/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84.jpg)
 
 ### 数据库安装
 
