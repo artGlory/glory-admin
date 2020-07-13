@@ -4,14 +4,6 @@
 
 **GloryAdmin使用基于角色的权限管理。角色树是一个以“系统管理员”为根节点的树，权限树是由多个子权限树组成。“系统管理员”拥有所有权限；非系统管理员角色可以查看当前角色和直属下级角色的信息，但只能增删改直属下级的角色的信息（直属下级：A是B的直属下级，则A必须为B的孩子节点）。**
 
-
-
-[github地址](https://github.com/artGlory/glory-admin)
-
-[gitee地址](https://gitee.com/artglory/glory-admin.git)
-
-
-
 * [Glory\-Admin](#glory-admin)
     
     * [技术说明](#%E6%8A%80%E6%9C%AF%E8%AF%B4%E6%98%8E)
