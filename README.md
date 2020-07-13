@@ -23,7 +23,7 @@
 
 ### 演示
 
-![](https://github.com/artGlory/IMG/blob/master/glory-admin/GloryAdmin.gif)
+![](https://github.com/artGlory/IMG/blob/master/glory-admin/GloryAdminShow.gif)
 
 ### 系统架构
 
