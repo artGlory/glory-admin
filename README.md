@@ -84,7 +84,7 @@
 
 2. admin只做controller，用于处理用户请求和后台业务之间的转发。（why这样设计呢？）because有些中间件系统需要用RPC框架做请求转发，because有些机密系统不屑于用springMVC而是选择vertx自主开发请求层。
 
- ![](https://github.com/artGlory/IMG/blob/master/glory-admin/back01.jpg)
+ ![](https://github.com/artGlory/IMG/blob/master/glory-admin/%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.jpg)
 
 ### 数据缓存层cacheDao
 
