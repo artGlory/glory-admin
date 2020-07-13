@@ -1,12 +1,17 @@
 # Glory-Admin
 
-**这是一个基于springboot2.1.9.RELEASE 和[vue-admin-template](https://github.com/PanJiaChen/vue-admin-template)搭建的后台框架；**
+**GloryAdmin是一个基于springboot2.1.9.RELEASE 和[vue-admin-template](https://github.com/PanJiaChen/vue-admin-template)搭建的后台框架；**
+
+**GloryAdmin使用基于角色的权限管理。角色树是一个以“系统管理员”为根节点的树，权限树是由多个子权限树组成。“系统管理员”拥有所有权限；非系统管理员角色可以查看当前角色和直属下级角色的信息，但只能增删改直属下级的角色的信息（直属下级：A是B的直属下级，则A必须为B的孩子节点）。**
+
+
 
 [github地址](https://github.com/artGlory/glory-admin)
 
 [gitee地址](https://gitee.com/artglory/glory-admin.git)
 
 * [Glory\-Admin](#glory-admin)
+    
     * [特点](#%E7%89%B9%E7%82%B9)
     * [技术说明](#%E6%8A%80%E6%9C%AF%E8%AF%B4%E6%98%8E)
     * [演示](#%E6%BC%94%E7%A4%BA)
@@ -18,22 +23,26 @@
     * [数据缓存层cacheDao](#%E6%95%B0%E6%8D%AE%E7%BC%93%E5%AD%98%E5%B1%82cachedao)
     * [日志记录](#%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95)
     * [分库分表](#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8)
-### 特点
+    
+    
+### 技术说明（由于是拿来）
 
-1. 数据库使用分库分表策略，可以进阶为分布式数据存储；
-2.  后台管理使用基于角色的权限管理
-
-### 技术说明
-
-| 项目       | 技术                                                      |
-| ---------- | --------------------------------------------------------- |
-| 后端技术   | springboot & Redis                                        |
-| 前端技术   | Element UI & axios & iconfont & permission control & lint |
-| 数据库技术 | mysql(**分库分表**，分布式数据库)                         |
+| 项目     | 技术                |
+| -------- | ------------------- |
+| 后端项目 | springboot          |
+| 前端项目 | Element UI & Vue.js |
+| 数据库   | MySQL               |
+| 缓存     | Redis               |
 
 ### 演示
 
 ![](https://github.com/artGlory/IMG/blob/master/glory-admin/GloryAdmin.gif)
+
+### 系统架构
+
+
+
+
 
 ### 数据库安装
 
