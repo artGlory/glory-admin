@@ -47,6 +47,10 @@
 
 ![](https://github.com/artGlory/IMG/blob/master/glory-admin/fronend-start.jpg)
 
+打开浏览器访问  http://localhost:9523  admin a123456
+
+![](https://github.com/artGlory/IMG/blob/master/glory-admin/%E5%90%8E%E5%8F%B0%E7%99%BB%E9%99%86%E7%95%8C%E9%9D%A2.jpg)
+
 ## 数据库
 
 
