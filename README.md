@@ -140,6 +140,27 @@
 
 ![](https://github.com/artGlory/IMG/blob/master/glory-admin/ResponseLog01.jpg)
 
+### 用户操作日志
+
+用户操作日志，采用注解的方法。如果此方法需要记录操作日志，只需在方法名称上面添加**@OperateLog**注解即可。
+
+```java
+@OperateLog
+@ApiOperation(value = "登出", notes = "登出")
+@GetMapping(Route.Admin.adminLogout)
+public ResponseDate adminLogout(HttpServletRequest httpServletRequest) {
+    AdminInfoDTO adminInfoDTO = AdminTool.getAdminUser(httpServletRequest);
+    AdminUser adminUser = adminUserMapper.selectByPrimaryKey(adminInfoDTO.getAdminUk());
+    adminUser.setNowToken("log-out");
+    int result = adminUserService.updateAdminToken(adminUser);
+    return ResponseDate.builder()
+            .success(result == 1)
+            .build();
+}
+```
+
+
+
 ## 前端
 
 
