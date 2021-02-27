@@ -93,10 +93,10 @@ public class CacheDaoAspect {
         map.put("methodName", methodName);
         map.put("returnType", returnType);
         map.put("params", params);
-        if (falg)
-            log.error("非缓存" + map.toString());
-        else
-            log.error(map.toString());
+//        if (falg)
+//            log.error("非缓存" + map.toString());
+//        else
+//            log.error(map.toString());
         return result;
     }
 
