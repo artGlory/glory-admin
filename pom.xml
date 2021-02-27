@@ -20,6 +20,7 @@
     </modules>
     <properties>
         <common.version>1.0-SNAPSHOT</common.version>
+        <admin.version>1.0-SNAPSHOT</admin.version>
         <api.version>1.0-SNAPSHOT</api.version>
         <jdk.version>1.8</jdk.version>
         <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
@@ -42,6 +43,7 @@
         <antisamy.version>1.5.3</antisamy.version>
         <springfox-swagger2.version>2.7.0</springfox-swagger2.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
+        <googleauth.version>1.5.0</googleauth.version>
     </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
@@ -166,6 +168,12 @@
                 <groupId>javax.validation</groupId>
                 <artifactId>validation-api</artifactId>
                 <version>${validation-api.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.warrenstrange/googleauth -->
+            <dependency>
+                <groupId>com.warrenstrange</groupId>
+                <artifactId>googleauth</artifactId>
+                <version>${googleauth.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

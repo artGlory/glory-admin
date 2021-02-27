@@ -15,9 +15,6 @@ Date: 2020-07-11 00:19:13
 
 SET FOREIGN_KEY_CHECKS=0;
 
--- ----------------------------
--- Table structure for log_admin_login_01
--- ----------------------------
 DROP TABLE IF EXISTS `log_admin_login_01`;
 CREATE TABLE `log_admin_login_01` (
   `uk` varchar(32) NOT NULL COMMENT '标识',
@@ -36,9 +33,6 @@ CREATE TABLE `log_admin_login_01` (
 -- Records of log_admin_login_01
 -- ----------------------------
 
--- ----------------------------
--- Table structure for log_admin_login_02
--- ----------------------------
 DROP TABLE IF EXISTS `log_admin_login_02`;
 CREATE TABLE `log_admin_login_02` (
   `uk` varchar(32) NOT NULL COMMENT '标识',
@@ -58,9 +52,6 @@ CREATE TABLE `log_admin_login_02` (
 -- ----------------------------
 INSERT INTO `log_admin_login_02` VALUES ('effb6aff7fc34dffb9b2627e6f7136d6', 'ca501d32c01e42ba8e0b6524e169f73a', 'admin', 'faee5041c0a64adb8f388e1a2e1af082', '192.168.254.158', '[局域网, 局域网]', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36', '2020-07-11 00:18:31', '2020-07-11 00:18:31');
 
--- ----------------------------
--- Table structure for log_operate_01
--- ----------------------------
 DROP TABLE IF EXISTS `log_operate_01`;
 CREATE TABLE `log_operate_01` (
   `uk` varchar(32) NOT NULL COMMENT '唯一标识',
@@ -82,9 +73,6 @@ CREATE TABLE `log_operate_01` (
 -- Records of log_operate_01
 -- ----------------------------
 
--- ----------------------------
--- Table structure for log_operate_02
--- ----------------------------
 DROP TABLE IF EXISTS `log_operate_02`;
 CREATE TABLE `log_operate_02` (
   `uk` varchar(32) NOT NULL COMMENT '唯一标识',

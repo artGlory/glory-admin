@@ -2,30 +2,27 @@
 Navicat MySQL Data Transfer
 
 Source Server         : root
-Source Server Version : 50722
+Source Server Version : 80023
 Source Host           : localhost:3306
 Source Database       : multi_module_db
 
 Target Server Type    : MYSQL
-Target Server Version : 50722
+Target Server Version : 80023
 File Encoding         : 65001
 
-Date: 2020-07-11 00:19:07
+Date: 2021-02-26 11:13:14
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
--- ----------------------------
--- Table structure for admin_privilege
--- ----------------------------
 DROP TABLE IF EXISTS `admin_privilege`;
 CREATE TABLE `admin_privilege` (
-  `uk` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '权限唯一标识',
-  `privilege_type` int(11) NOT NULL COMMENT '权限类型 1：目录权限；2：页面权限；3：按钮权限',
-  `privilege_name` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '权限名称',
-  `privilege_path` varchar(255) CHARACTER SET utf8mb4 NOT NULL COMMENT '权限路径',
-  `sort` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '排序',
-  `parent_uk` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '父标签标识',
+  `uk` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限唯一标识',
+  `privilege_type` int NOT NULL COMMENT '权限类型 1：目录权限；2：页面权限；3：按钮权限',
+  `privilege_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限名称',
+  `privilege_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限路径',
+  `sort` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '排序',
+  `parent_uk` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '父标签标识',
   `create_time` datetime NOT NULL COMMENT '插入时间',
   `update_time` datetime NOT NULL COMMENT '最后更改时间',
   PRIMARY KEY (`uk`,`privilege_path`)
@@ -66,15 +63,12 @@ INSERT INTO `admin_privilege` VALUES ('e97df9fb710641a49cec2b1dd134ff4f', '3', '
 INSERT INTO `admin_privilege` VALUES ('fa32475acdcf469ea6a58e2dc15ed40d', '2', '用户管理', '/amdin-manage/admin-manage', '11-01', '3c9ef7b90e5a43cc863941f0f2368021', '2020-06-30 17:02:11', '2020-06-30 17:02:16');
 INSERT INTO `admin_privilege` VALUES ('ff1b8bcc23b54658a794f37a4a154170', '3', '添加用户', 'UserController.addAdminInfo', '11-01-05', 'fa32475acdcf469ea6a58e2dc15ed40d', '2020-07-03 16:50:11', '2020-07-03 16:50:13');
 
--- ----------------------------
--- Table structure for admin_role
--- ----------------------------
 DROP TABLE IF EXISTS `admin_role`;
 CREATE TABLE `admin_role` (
-  `uk` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT 'uk',
-  `role_name` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '角色名称',
-  `role_desc` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '角色描述',
-  `parent_uk` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '父uk',
+  `uk` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'uk',
+  `role_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色名称',
+  `role_desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '角色描述',
+  `parent_uk` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '父uk',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
   PRIMARY KEY (`uk`)
@@ -85,14 +79,11 @@ CREATE TABLE `admin_role` (
 -- ----------------------------
 INSERT INTO `admin_role` VALUES ('faee5041c0a64adb8f388e1a2e1af082', '系统管理员', '系统管理员，拥有所有权限', '111222333444aaabbbcccddd99988877', '2020-06-25 15:43:31', '2020-07-11 00:11:31');
 
--- ----------------------------
--- Table structure for admin_role_privilege
--- ----------------------------
 DROP TABLE IF EXISTS `admin_role_privilege`;
 CREATE TABLE `admin_role_privilege` (
-  `uk` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '主键',
-  `role_uk` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '角色主键',
-  `privilege_uk` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '权限主键',
+  `uk` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '主键',
+  `role_uk` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色主键',
+  `privilege_uk` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限主键',
   `create_time` datetime NOT NULL,
   `update_time` datetime NOT NULL,
   PRIMARY KEY (`uk`),
@@ -103,19 +94,16 @@ CREATE TABLE `admin_role_privilege` (
 -- Records of admin_role_privilege
 -- ----------------------------
 
--- ----------------------------
--- Table structure for admin_user
--- ----------------------------
 DROP TABLE IF EXISTS `admin_user`;
 CREATE TABLE `admin_user` (
-  `uk` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '唯一标识',
-  `username` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '用户名',
-  `password` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '用户密码',
-  `role_uk` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '角色',
-  `now_token` varchar(512) CHARACTER SET utf8mb4 DEFAULT NULL,
-  `google_key` varchar(32) CHARACTER SET utf8mb4 DEFAULT NULL,
-  `google_login` int(11) NOT NULL COMMENT '使用google验证器，二步登陆',
-  `forbid_login` int(11) NOT NULL,
+  `uk` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '唯一标识',
+  `username` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户名',
+  `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户密码',
+  `role_uk` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色',
+  `now_token` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `google_key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `google_login` int NOT NULL COMMENT '使用google验证器，二步登陆',
+  `forbid_login` int NOT NULL,
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '最后一次信息更改时间',
   PRIMARY KEY (`uk`,`username`)
@@ -126,17 +114,14 @@ CREATE TABLE `admin_user` (
 -- ----------------------------
 INSERT INTO `admin_user` VALUES ('ca501d32c01e42ba8e0b6524e169f73a', 'admin', 'dc483e80a7a0bd9ef71d8cf973673924', 'faee5041c0a64adb8f388e1a2e1af082', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbi11c2VyIiwiYXVkIjoiYWRtaW4td2ViIiwiaXNzIjoid2ViLWFkbWluIiwiZXhwIjoxNTk0NjU3MTEwLCJpYXQiOjE1OTQzOTc5MTAsImFkbWluLXVrIjoiY2E1MDFkMzJjMDFlNDJiYThlMGI2NTI0ZTE2OWY3M2EifQ.U_SxTRxbV7jiJDjqZ0KGvJXLYnXkua_lC0mSMAgFnNg', null, '0', '0', '2020-06-27 11:25:21', '2020-07-11 00:18:31');
 
--- ----------------------------
--- Table structure for system_config
--- ----------------------------
 DROP TABLE IF EXISTS `system_config`;
 CREATE TABLE `system_config` (
-  `uk` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '唯一标识',
-  `config_area` int(11) NOT NULL COMMENT '配置所属区域',
-  `config_group` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '组',
-  `config_key` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT 'key',
-  `config_value` varchar(255) CHARACTER SET utf8mb4 NOT NULL COMMENT '值',
-  `config_desc` varchar(255) CHARACTER SET utf8mb4 NOT NULL COMMENT '描述',
+  `uk` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '唯一标识',
+  `config_area` int NOT NULL COMMENT '配置所属区域',
+  `config_group` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '组',
+  `config_key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'key',
+  `config_value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '值',
+  `config_desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '描述',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
   PRIMARY KEY (`uk`),
