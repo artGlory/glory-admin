@@ -97,16 +97,16 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
     //需要增加通配，过滤大小写组合
     public String cleanSQLInject(String src) {
         String temp = src;
-        src = src.replaceAll("insert", "forbidI")
-                .replaceAll("select", "forbidS")
-                .replaceAll("update", "forbidU")
-                .replaceAll("delete", "forbidD")
-                .replaceAll("and", "forbidA");
-//                .replaceAll("or", "forbidO");
+        src = src.replaceAll(" insert ", "forbidI")
+                .replaceAll(" select ", "forbidS")
+                .replaceAll(" update ", "forbidU")
+                .replaceAll(" delete ", "forbidD")
+                .replaceAll(" and ", "forbidA")
+                .replaceAll(" or ", "forbidO");
         if (!temp.equals(src)) {
-            log.info("输入信息存在SQL攻击！");
-            log.info("原始输入信息-->" + temp);
-            log.info("处理后信息-->" + src);
+            log.info("输入信息存在SQL攻击！"
+                    + "原始输入信息-->【" + temp
+                    + "】处理后信息-->【" + src + "】");
         }
         return src;
     }
