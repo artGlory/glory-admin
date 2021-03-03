@@ -11,7 +11,7 @@ import java.io.File;
 
 @Component
 @Slf4j
-public class StartUpListner implements ApplicationRunner {
+public class StartUpListener implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
