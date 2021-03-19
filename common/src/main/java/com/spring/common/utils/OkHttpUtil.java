@@ -64,7 +64,7 @@ public class OkHttpUtil {
     }
 
     /**
-     * 请求-》获取response
+     * 请求-》获取Response
      *
      * @param request
      * @return
