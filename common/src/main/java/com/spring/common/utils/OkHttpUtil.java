@@ -63,9 +63,26 @@ public class OkHttpUtil {
         return responseStr;
     }
 
+    /**
+     * 请求-》获取response
+     *
+     * @param request
+     * @return
+     */
+    public static Response getResponse(Request request) throws IOException {
+        Response response = null;
+        try {
+            response = getOkHttpClient().newCall(request).execute();
+        } catch (IOException e) {
+//            e.printStackTrace();
+            throw e;
+        }
+        return response;
+    }
+
 
     public static void main(String[] args) {
-        String url = "https://ez-k.enzuo88.com/?s=/ApiPublic/getNewCaptcha/";
+        String url = "https://baidu.com/";
         String str = null;
         try {
             str = OkHttpUtil.getResponseStr(new Request.Builder().url(url).build());
