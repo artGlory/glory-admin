@@ -44,6 +44,7 @@
         <springfox-swagger2.version>2.7.0</springfox-swagger2.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <googleauth.version>1.5.0</googleauth.version>
+        <JSonp-java-HTML-parse.version>1.13.1</JSonp-java-HTML-parse.version>
     </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
@@ -174,6 +175,12 @@
                 <groupId>com.warrenstrange</groupId>
                 <artifactId>googleauth</artifactId>
                 <version>${googleauth.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${JSonp-java-HTML-parse.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

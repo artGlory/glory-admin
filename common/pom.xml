@@ -146,6 +146,11 @@
             <groupId>com.warrenstrange</groupId>
             <artifactId>googleauth</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
