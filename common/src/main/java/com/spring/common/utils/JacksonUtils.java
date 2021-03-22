@@ -15,13 +15,16 @@ public class JacksonUtils {
     private static ObjectMapper objectMapper;//线程安全对象
 
     /**
-     * 获取ObjectMapper；单例模式；
+     * 获取ObjectMapper；单例模式；双重验证
      *
      * @return
      */
     public static ObjectMapper getObjectMapper() {
         if (objectMapper == null) {
-            objectMapper = new ObjectMapper();
+            synchronized (JacksonUtils.class) {
+                if (objectMapper == null)
+                    objectMapper = new ObjectMapper();
+            }
         }
         return objectMapper;
     }
