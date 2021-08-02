@@ -40,7 +40,7 @@
         <jackson-databind.version>2.9.6</jackson-databind.version>
         <okhttp.version>3.9.1</okhttp.version>
         <jasypt-spring-boot-starter.version>1.14</jasypt-spring-boot-starter.version>
-        <antisamy.version>1.5.3</antisamy.version>
+        <antisamy.version>1.6.4</antisamy.version>
         <springfox-swagger2.version>2.7.0</springfox-swagger2.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <googleauth.version>1.5.0</googleauth.version>
