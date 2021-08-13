@@ -34,7 +34,7 @@
         <aes-everywhere-java.version>1.2.7</aes-everywhere-java.version>
         <Java-WebSocket.version>1.4.0</Java-WebSocket.version>
         <commons-lang3.version>3.8.1</commons-lang3.version>
-        <bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
+        <bcprov-jdk15on.version>1.67</bcprov-jdk15on.version>
         <bcprov-ext-jdk15on.version>1.60</bcprov-ext-jdk15on.version>
         <java-jwt.version>3.4.0</java-jwt.version>
         <jackson-databind.version>2.9.6</jackson-databind.version>
