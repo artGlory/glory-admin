@@ -37,7 +37,7 @@
         <bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
         <bcprov-ext-jdk15on.version>1.60</bcprov-ext-jdk15on.version>
         <java-jwt.version>3.4.0</java-jwt.version>
-        <jackson-databind.version>2.9.6</jackson-databind.version>
+        <jackson-databind.version>2.9.10.8</jackson-databind.version>
         <okhttp.version>3.9.1</okhttp.version>
         <jasypt-spring-boot-starter.version>1.14</jasypt-spring-boot-starter.version>
         <antisamy.version>1.5.3</antisamy.version>
