@@ -44,7 +44,7 @@
         <springfox-swagger2.version>2.7.0</springfox-swagger2.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <googleauth.version>1.5.0</googleauth.version>
-        <JSonp-java-HTML-parse.version>1.13.1</JSonp-java-HTML-parse.version>
+        <JSonp-java-HTML-parse.version>1.15.3</JSonp-java-HTML-parse.version>
     </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
